@@ -2,7 +2,11 @@ UTN - Facultad Regional Buenos Aires - Materia Paradigmas de Programación
 
 ## Equipo de desarrollo:
 
-- Completar
+- Grupo 505:
+Camila Sol Hernández Greco,
+Belén Romeo,
+Lucila Kim y
+Malena Vincenti
 
 ## Introducción
 
