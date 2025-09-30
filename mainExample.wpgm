@@ -1,7 +1,31 @@
 import wollok.game.*
 
-import example.pepita
+import example.*
 
+program princesas {
+	game.title("Cenicienta")
+	game.height(100)
+	game.width(100)
+    game.cellSize(70)
+
+	// add assets in asset folder, for example, for the background
+    game.boardGround("fondo.png")
+
+	//
+	game.showAttributes(cenicienta) //Debug
+
+	// personajes
+	game.addVisualCharacter(cenicienta)
+
+	game.addVisual(escoba)
+	game.addVisual(gato)
+
+	game.start()
+}
+
+
+
+/*
 program PepitaGame {
 	game.title("Pepita")
 	game.height(10)
@@ -15,4 +39,4 @@ program PepitaGame {
 	game.showAttributes(pepita) //Debug
 
 	game.start()
-}
+}*/
