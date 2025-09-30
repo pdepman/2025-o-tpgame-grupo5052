@@ -1,6 +1,9 @@
 import wollok.game.*
 
-import example.*
+import personajes.*
+import animales.*
+import objetos.*
+
 
 program princesas {
 	game.title("Cenicienta")
