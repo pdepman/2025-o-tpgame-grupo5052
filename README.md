@@ -53,4 +53,4 @@ El objetivo es correr contra el reloj y contra el **nivel de estrés** de Cenici
 
 Toda la fundamentación teórica, la explicación de los paradigmas aplicados (Polimorfismo, Herencia, Encapsulamiento) y el diseño de la solución se encuentran detallados en el siguiente documento:
 
-* **[Ver Diseño Técnico y Fundamentos de la Materia](./DISEÑO.md)**
+* **[Ver Diseño Técnico y Fundamentos de la Materia](./disenio.md)**
