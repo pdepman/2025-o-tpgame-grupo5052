@@ -24,7 +24,7 @@ El objetivo es correr contra el reloj y contra el **nivel de estrés** de Cenici
 
 ## Capturas
 
-**
+![banner](mainBanner.jpg)
 
 
 ---
