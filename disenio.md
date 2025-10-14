@@ -6,13 +6,13 @@ Para hacer el juego, aplicamos varios de los conceptos que vimos en Paradigmas. 
 
 ### 1. Polimorfismo: La Tecla de "Interactuar" Mágica 
 
-El **polimorfismo** es la idea clave de nuestro juego. [cite_start]Como dice el apunte, para que exista, se necesitan como mínimo tres objetos: uno que "usa" y al menos dos que son "usados"[cite: 20].
+El **polimorfismo** es la idea clave de nuestro juego.Como dice el apunte, para que exista, se necesitan como mínimo tres objetos: uno que "usa" y al menos dos que son "usados".
 
 * **En nuestro juego** :
     * **El que "usa"**: Es `Cenicienta`.
     * **Los "usados"**: Son el `Raton`, la `Hermanastra`, el `Gato`, el `RelojDeArena`, etc.
 
-    La magia está en que Cenicienta no necesita saber con qué está interactuando. [cite_start]Ella solo manda un mensaje: `interactuar()`[cite: 18, 40]. [cite_start]Todos esos objetos son polimórficos porque entienden ese mismo mensaje, pero cada uno responde a su manera[cite: 22]:
+    La magia está en que Cenicienta no necesita saber con qué está interactuando.Ella solo manda un mensaje: `interactuar()`.Todos esos objetos son polimórficos porque entienden ese mismo mensaje, pero cada uno responde a su manera:
     * `raton.interactuar()` => Le baja el estrés a Cenicienta.
     * `hermanastra.interactuar()` => Le sube el estrés.
     * `relojDeArena.interactuar()` => Le da más tiempo al `Juego`.
@@ -23,7 +23,7 @@ El **polimorfismo** es la idea clave de nuestro juego. [cite_start]Como dice el 
 
 ### 2. Encapsulamiento: ¡Nadie Toca el Estrés de Cenicienta! 
 
-La idea del **encapsulamiento** es que cada objeto se encargue de sus propias cosas. Sus datos internos (atributos) están "encapsulados" o protegidos, y solo se pueden modificar a través de sus métodos. [cite_start]Quien usa el objeto no necesita saber los detalles de cómo funciona por dentro[cite: 597].
+La idea del **encapsulamiento** es que cada objeto se encargue de sus propias cosas. Sus datos internos (atributos) están "encapsulados" o protegidos, y solo se pueden modificar a través de sus métodos. Quien usa el objeto no necesita saber los detalles de cómo funciona por dentro.
 
 * **En nuestro juego**:
     El mejor ejemplo es el estrés de `Cenicienta`. El atributo `estres` es parte del estado interno de ella. Ningún otro objeto puede venir y cambiarle el valor directamente.
@@ -36,12 +36,12 @@ La idea del **encapsulamiento** es que cada objeto se encargue de sus propias co
 
 ---
 
-### 3. Herencia: No Escribir el Mismo Código Mil Veces 👨‍👩‍👧
+### 3. Herencia: No Escribir el Mismo Código Mil Veces 
 
-Usamos **herencia** para agrupar comportamiento que se repetía. [cite_start]La idea es tener una clase "madre" (superclase) con toda la lógica común, y clases "hijas" (subclases) que heredan todo eso y le agregan su toque especial[cite: 710, 711].
+Usamos **herencia** para agrupar comportamiento que se repetía. La idea es tener una clase "madre" (superclase) con toda la lógica común, y clases "hijas" (subclases) que heredan todo eso y le agregan su toque 
 
 * **En nuestro juego**:
-    1.  **`ElementoDeJuego` (La Abuela de Todos)**: Es una clase abstracta que dice: "toda cosa que exista en el juego tiene una posición y una imagen". [cite_start]La definimos como abstracta porque no tiene sentido crear un "ElementoDeJuego" genérico, solo sirve como base[cite: 951].
+    1.  **`ElementoDeJuego` (La Abuela de Todos)**: Es una clase abstracta que dice: "toda cosa que exista en el juego tiene una posición y una imagen".La definimos como abstracta porque no tiene sentido crear un "ElementoDeJuego" genérico, solo sirve como base.
     2.  **`Personaje` (La Mamá)**: Es un `ElementoDeJuego`, así que hereda lo de la posición y la imagen. Pero le agrega algo nuevo: el método `mover()`.
     3.  **`Cenicienta`, `Raton`, `Hermanastra` (Las Hijas)**: Todas heredan de `Personaje`. Así, no tuvimos que escribir el código para moverse en cada una. ¡Ya lo tenían gratis! Simplemente lo reusamos.
 
@@ -51,7 +51,7 @@ Usamos **herencia** para agrupar comportamiento que se repetía. [cite_start]La 
 
 ### 4. Referencias y Atributos: `var` vs. `const` 
 
-[cite_start]Como vimos en la cursada, una variable es una **referencia**, como una flecha que apunta a un objeto[cite: 609, 610].
+Como vimos en la cursada, una variable es una **referencia**, como una flecha que apunta a un objeto.
 
 * **En nuestro juego**:
     * Usamos **`var`** para cosas que necesitan cambiar a qué objeto apuntan. Por ejemplo, el `estres` de Cenicienta es `var` porque su valor (el objeto número al que apunta) cambia todo el tiempo.
