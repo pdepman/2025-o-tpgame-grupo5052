@@ -38,7 +38,7 @@ El objetivo es correr contra el reloj y contra el **nivel de estrés** de Cenici
 2.  **Impide el Paso**: La trampa completada impedirá que las hermanastras entren a la habitación cuando se acabe el tiempo.
 3.  **Gana una Prenda**: Cada vez que superas un nivel (completas una trampa), Cenicienta gana una prenda para su atuendo (vestido, guantes, etc.).
 4.  **Gestiona el Tiempo**: Cada nivel tiene un temporizador. ¡Debes armar la trampa antes de que el tiempo se agote! Puedes encontrar **relojes de arena** para añadir segundos extra.
-5.  **Controla el Estrés**: La barra de estrés de Cenicienta aumentará si se encuentra con sus **hermanastras** o con el **gato**. Si la barra llega al 100% o no logras armar la trampa a tiempo, pierdes.
+5.  **Controla el Estrés**: La barra de estrés de Cenicienta aumentará si se encuentra con sus **hermanastras** o con el **gato**. Si la barra llega al 100% o no logras armar la trampa a tiempo, pierdes. Para poder ir disminuyendola y poder seguir jugando, al encontrar los elementos para las trampas, Cenicienta disminuira su nivel de estrés
 6.  **Busca Ayuda**: Los **ratones amigos** te darán pistas graciosas sobre la ubicación de los objetos y reducirán tu nivel de estrés.
 7.  **Condición de Victoria**: Ganas el juego al conseguir todas las prendas y llegar a la habitación final para encontrar el **zapato de cristal**.
 
