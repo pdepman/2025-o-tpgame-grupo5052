@@ -1,7 +1,7 @@
 import wollok.game.*
 import personajes.*
 import objetos.*
-
+/*
 // objeto 'juego' es el director de orquesta
 object juego {
     var cenicienta
@@ -25,18 +25,7 @@ object juego {
         game.start()
     }
 
-    method configurarNivel1() {
-        game.backgroundImage("kitchen_background.png") // La imagen de la cocina
-        
-        // creamos a Cenicienta
-        cenicienta = new Cenicienta(position=game.center(), image="cenicienta.png")
-        game.addVisual(cenicienta)
-        
-        // creamos los ratones
-        const raton1 = new Raton(position=game.at(1,1), image="raton.png", pista="Psst... ¡revisa cerca del fuego!")
-        game.addVisual(raton1)
-        
-        // aca vamos creando y agregando todos los demas onda muebles, ObjetosDeTrampa, etc.
+    
     }
     
     method actualizarJuego() {
@@ -63,3 +52,4 @@ object juego {
         // objetoCercano.interactuar(cenicienta)
     }
 }
+*/

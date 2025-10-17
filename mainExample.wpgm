@@ -1,18 +1,25 @@
 import wollok.game.*
+import src.personajes.*
 
-import example.pepita
 
-program PepitaGame {
-	game.title("Pepita")
-	game.height(10)
-	game.width(10)
+program Cenicienta {
 
-	// add assets in asset folder, for example, for the background
-  // game.boardGround("fondo2.jpg")
+//DIMENSIONES DE LA GRILLA
+	game.height(800)
+    game.width(1000)
+	game.cellSize(50)
+	game.title("Wollok de Cristal")
 
-	//
+//ESCENARIO
+	game.boardGround("assets/habitacionesImg/cocina/cocinaVistaR3.png")
+	game.boardGround("assets/habitacionesImg/biblioteca/bibliotecaVistaR3.png")
+	game.boardGround("assets/habitacionesImg/banio/banioVistaR3.png")
+	game.boardGround("assets/habitacionesImg/dormitorio/dormitorioVistaR3.png")
 
-	game.showAttributes(pepita) //Debug
+
+//PERSONAJES
+	game.addVisualCharacter(cenicientaPobre)
+	game.addVisualCharacter(cenicientaLinda)
 
 	game.start()
 }

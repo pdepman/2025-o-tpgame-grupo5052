@@ -1,5 +1,28 @@
 import objetos.*
 
+
+object cenicienta {
+    var position = game.at(0,0)
+    var sufijo = "Pobre" // o "Linda", para cambiar su imagen
+    method image() = "assets/cenicienta" + sufijo + ".png"
+
+
+}
+
+/*object diana {
+  var property position = game.at(140, 0)
+  var sufijo = '_idlee'
+  method image() = 'diana' + sufijo + '.png'
+
+  method cambiarImagen(){
+    if(sufijo == '_squat'){
+      sufijo = '_idlee'
+    }else {
+      sufijo = '_squat'
+    }
+  }*/
+
+/*
 // un Personaje "es un" ElementoDeJuego, pero además, sabe moverse.
 // sigue siendo abstracta porque no tendremos un "personaje genérico" como un gusto de helado no existe el gusto "helado".
 abstract class Personaje inherits ElementoDeJuego {
@@ -68,3 +91,4 @@ class Hermanastra inherits Personaje implements Interactuable {
         game.say(self, "¡Te voy a acusar con mamá!")
     }
 }
+*/

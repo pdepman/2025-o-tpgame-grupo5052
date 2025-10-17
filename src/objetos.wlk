@@ -1,6 +1,15 @@
+
+
+
+
+
+
+
+
 // la interfaz es un "contrato". cualquier clase que la implemente
 // ESTA OBLIGADA a tener un metodo llamado "interactuar".
 // esto es la base de nuestro polimorfismo.
+/*
 interface Interactuable {
     method interactuar(personaje)
 }
@@ -54,3 +63,4 @@ class RelojDeArena inherits ElementoDeJuego implements Interactuable {
 // Las prendas son solo objetos visuales por ahora
 class Prenda inherits ElementoDeJuego {}
 class ZapatoDeCristal inherits Prenda {}
+*/
