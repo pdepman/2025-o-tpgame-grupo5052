@@ -12,14 +12,14 @@ program Cenicienta {
 
 //ESCENARIO
 	game.boardGround("assets/habitacionesImg/cocina/cocinaVistaR3.png")
-	game.boardGround("assets/habitacionesImg/biblioteca/bibliotecaVistaR3.png")
-	game.boardGround("assets/habitacionesImg/banio/banioVistaR3.png")
-	game.boardGround("assets/habitacionesImg/dormitorio/dormitorioVistaR3.png")
+	//game.boardGround("assets/habitacionesImg/biblioteca/bibliotecaVistaR3.png")
+	//game.boardGround("assets/habitacionesImg/banio/banioVistaR3.png")
+	//game.boardGround("assets/habitacionesImg/dormitorio/dormitorioVistaR3.png")
 
 
 //PERSONAJES
-	game.addVisualCharacter(cenicientaPobre)
-	game.addVisualCharacter(cenicientaLinda)
+	game.addVisualCharacter(cenicienta)
+
 
 	game.start()
 }
