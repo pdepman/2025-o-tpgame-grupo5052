@@ -1,17 +1,26 @@
 import wollok.game.*
+
 import src.personajes.*
+import src.objetos.*
 
-program Cenicienta {
-  game.title("Wollok de Cristal")
-  game.height(800)
-  game.width(1000)
-  game.cellSize(50)
 
-  game.boardGround("assets/cocinaVistaR3.png")  // <- ruta correcta
+program princesas {
+	game.title("Cenicienta")
+	game.height(80)
+	game.width(80)
+    game.cellSize(50)
 
-  game.addVisual(cenicienta)
+	// add assets in asset folder, for example, for the background
+    game.boardGround("cocinaVistaR3.png")
 
-  game.start()
+	//
+	game.showAttributes(cenicienta) //Debug
+
+	// personajes
+	game.addVisualCharacter(cenicienta)
+
+
+	game.start()
 }
 
 /*

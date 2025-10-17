@@ -1,21 +1,22 @@
-import objetos.*
+
+import wollok.game.*
 
 
+class Personaje {
+  var position
+  var img 
 
-object cenicienta {
-    var position = game.at(0,0)
-    method image() = "cenicientaPobre.png"
-    
-    method position() = position
+  method position(_nuevaPosition) { position = _nuevaPosition }
+  method position() = position
+  method img(_nuevaImg) { img = _nuevaImg }
+  method image() = img
 
-    method position(nuevaPosition){
-        position = nuevaPosition
-    }
-
-    method moverALaDerecha() {
-        position = position.right(1)
-    }
 }
+
+const cenicienta = new Personaje(
+    position = game.center(), 
+    img = "cenicientaPobre.png"
+    )
 
 
 /*
