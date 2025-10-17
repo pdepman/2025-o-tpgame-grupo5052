@@ -1,25 +1,37 @@
 import wollok.game.*
 import src.personajes.*
 
-
 program Cenicienta {
+  game.title("Wollok de Cristal")
+  game.height(800)
+  game.width(1000)
+  game.cellSize(50)
 
+  game.boardGround("assets/cocinaVistaR3.png")  // <- ruta correcta
+
+  game.addVisual(cenicienta)
+
+  game.start()
+}
+
+/*
+program Cenicienta {
 //DIMENSIONES DE LA GRILLA
+	game.title("Wollok de Cristal")
 	game.height(800)
     game.width(1000)
 	game.cellSize(50)
-	game.title("Wollok de Cristal")
+	
 
 //ESCENARIO
-	game.boardGround("assets/habitacionesImg/cocina/cocinaVistaR3.png")
+	game.boardGround("cocinaVistaR3.png")
 	//game.boardGround("assets/habitacionesImg/biblioteca/bibliotecaVistaR3.png")
 	//game.boardGround("assets/habitacionesImg/banio/banioVistaR3.png")
 	//game.boardGround("assets/habitacionesImg/dormitorio/dormitorioVistaR3.png")
 
-
 //PERSONAJES
-	game.addVisualCharacter(cenicienta)
-
+	game.addVisual(cenicienta)
 
 	game.start()
 }
+*/
