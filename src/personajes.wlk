@@ -1,10 +1,8 @@
-
 import wollok.game.*
+import objetos.*
 
-
-class Personaje {
-  var position
-  var img 
+class Personaje inherits ElementoDeJuego {
+  
 
   method position(_nuevaPosition) {
       if (self.puedeMoverse(_nuevaPosition)) {
@@ -38,21 +36,6 @@ class Personaje {
 
 }
 
-const cenicienta = new Personaje(
-    position = game.at(20, 20), 
-    img = "cenicientaPobre.png"
-    )
-
-
-/*
-// un Personaje "es un" ElementoDeJuego, pero además, sabe moverse.
-// sigue siendo abstracta porque no tendremos un "personaje genérico" como un gusto de helado no existe el gusto "helado".
-abstract class Personaje inherits ElementoDeJuego {
-    method mover(unaPosicion) {
-        position = unaPosicion
-    }
-}
-
 // LA MAIN CHARACTER hereda de Personaje, por lo que ya sabe moverse
 // y tiene posición e imagen.
 class Cenicienta inherits Personaje {
@@ -76,7 +59,7 @@ class Cenicienta inherits Personaje {
 
     // metodos para los controles del juego
     method agarrar(objeto) {
-        if (self.objetoEnMano() == null && objeto.esAgarrable()) {
+        if (self.objetoEnMano() == null) {
             objetoEnMano = objeto
             // hacemos como que el objeto la siga? raro...
         }
@@ -88,10 +71,10 @@ class Cenicienta inherits Personaje {
     }
 }
 
-// los ratones ayudan a Cenicienta
-class Raton inherits Personaje implements Interactuable {
+// PERSONAJES NPSCS
+class Raton inherits Personaje  {
     var property pista
-
+    override method esInteractuable() = true
     // como implementa Interactuable, TIENE QUE tener este método.
     override method interactuar(personaje) {
         personaje.disminuirEstres(10)
@@ -100,17 +83,18 @@ class Raton inherits Personaje implements Interactuable {
 }
 
 // gato y las hermanastras molestan a Cenicienta
-class Gato inherits Personaje implements Interactuable {
+class Gato inherits Personaje  {
+    override method esInteractuable() = true
     override method interactuar(personaje) {
         personaje.aumentarEstres(15)
         game.say(self, "Miau... (te juzga)")
     }
 }
 
-class Hermanastra inherits Personaje implements Interactuable {
+class Hermanastra inherits Personaje {
+    override method esInteractuable() = true
     override method interactuar(personaje) {
         personaje.aumentarEstres(20)
-        game.say(self, "¡Te voy a acusar con mamá!")
+        game.say(self, "¡Te voy a acusar!")
     }
 }
-*/

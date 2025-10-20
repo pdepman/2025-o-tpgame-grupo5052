@@ -1,7 +1,7 @@
 import wollok.game.*
 
 import src.personajes.*
-import src.objetos.*
+
 
 
 program princesas {
@@ -11,7 +11,7 @@ program princesas {
     game.cellSize(50)
 
 	// add assets in asset folder, for example, for the background
-    game.boardGround("cocinaVistaR3.png")
+    game.boardGround("cocina/cocinaVistaR3.png")
 
 	//
 	game.showAttributes(cenicienta) //Debug
