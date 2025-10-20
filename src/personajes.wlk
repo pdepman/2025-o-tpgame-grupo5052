@@ -6,15 +6,40 @@ class Personaje {
   var position
   var img 
 
-  method position(_nuevaPosition) { position = _nuevaPosition }
+  method position(_nuevaPosition) {
+      if (self.puedeMoverse(_nuevaPosition)) {
+          position = _nuevaPosition
+      }
+  }
+
   method position() = position
   method img(_nuevaImg) { img = _nuevaImg }
   method image() = img
+ 
+  // metodo que verifica si la posición está dentro del rombo "piso"
+  method puedeMoverse(_pos) {
+      var x = _pos.x()
+      var y = _pos.y()
+      
+      var xMin
+      var xMax
+
+      if (y <= 20) { // parte inferior del rombo
+          xMin = (y - 0)/(-0.541) + 35
+          xMax = (y - 0)/0.513 + 35
+      } else { // parte superior del rombo
+          xMin = (y - 20)/0.541 - 2
+          xMax = (y - 20)/(-0.513) + 74
+      }
+
+      return x >= xMin && x <= xMax
+  }
+
 
 }
 
 const cenicienta = new Personaje(
-    position = game.center(), 
+    position = game.at(20, 20), 
     img = "cenicientaPobre.png"
     )
 
