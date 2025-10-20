@@ -1,6 +1,6 @@
 import wollok.game.*
 
-object biblioteca {
+object jardin {
   var property image = "bibliotecaVistaR3.png" 
   var property position = game.origin()
 }

@@ -69,13 +69,13 @@ class RelojDeArena inherits ObjetoInteractuable {
 
 }
 
-class Puerta inherits  ObjetoInteractuable{
+class Puerta inherits ObjetoInteractuable {
     var property nivelDestino
+    override method esPuerta() = true
 
-    override method interactuar(personaje){
-        //me lo va a hacer jeugo 
+    override method interactuar(personaje) {
+        // Lo maneja juego.wlk al colisionar
     }
-   
 }
 // Las prendas son solo objetos visuales por ahora
 class Prenda inherits ElementoDeJuego {}

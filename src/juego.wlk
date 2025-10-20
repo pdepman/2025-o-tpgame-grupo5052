@@ -1,7 +1,7 @@
-
+import wollok.game.*
 import personajes.*
 import objetos.*
-import wollok.game.*
+import reloj.*
 
 // objeto 'juego' es el director de orquesta
 object juego {

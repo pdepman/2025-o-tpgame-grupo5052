@@ -1,6 +1,5 @@
 import wollok.game.*
-
-import src.personajes.*
+import personajes.*
 
 
 
@@ -22,25 +21,3 @@ program princesas {
 
 	game.start()
 }
-
-/*
-program Cenicienta {
-//DIMENSIONES DE LA GRILLA
-	game.title("Wollok de Cristal")
-	game.height(800)
-    game.width(1000)
-	game.cellSize(50)
-	
-
-//ESCENARIO
-	game.boardGround("cocinaVistaR3.png")
-	//game.boardGround("assets/habitacionesImg/biblioteca/bibliotecaVistaR3.png")
-	//game.boardGround("assets/habitacionesImg/banio/banioVistaR3.png")
-	//game.boardGround("assets/habitacionesImg/dormitorio/dormitorioVistaR3.png")
-
-//PERSONAJES
-	game.addVisual(cenicienta)
-
-	game.start()
-}
-*/
