@@ -1,18 +1,33 @@
+import src.barraEstres.*
 import wollok.game.*
+import src.personajes.*
 
-import example.pepita
 
-program PepitaGame {
-	game.title("Pepita")
-	game.height(10)
-	game.width(10)
+
+program princesas {
+	game.title("Cenicienta")
+	game.height(80)
+	game.width(80)
+    game.cellSize(50)
 
 	// add assets in asset folder, for example, for the background
-  // game.boardGround("fondo2.jpg")
+    game.boardGround("cocinaVistaR3.png")
 
 	//
+	game.showAttributes(cenicienta) //Debug
 
-	game.showAttributes(pepita) //Debug
+	// personajes
+	game.addVisualCharacter(cenicienta)
+
+
+	barraEstres.iniciar()
+
+	game.onTick(10000, "subirEstres", {
+		barraEstres.aumentarNivel()
+		if (barraEstres.sufijo == "5") {
+			game.removeTickEvent("subirEstres")
+		}
+	})
 
 	game.start()
 }
