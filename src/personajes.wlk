@@ -49,12 +49,18 @@ class Cenicienta inherits Personaje {
   method aumentarEstres(cantidad) { estres = (estres + cantidad).min(estresMaximo) }
   method disminuirEstres(cantidad) { estres = (estres - cantidad).max(0) }
   method agregarPrenda(prenda) { prendas.add(prenda) }
+  method objetoEnMano() = objetoEnMano
 
   method agarrar(objeto) {
     if (self.objetoEnMano() == null) { objetoEnMano = objeto }
   }
   method soltar() { objetoEnMano = null }
 }
+
+const cenicienta = new Cenicienta(
+    position = game.at(20, 8), 
+    image = "cenicientaPobre.png"
+    )
 
 class Raton inherits Personaje  {
   var property pista

@@ -1,5 +1,6 @@
+import src.barraEstres.*
 import wollok.game.*
-import personajes.*
+import src.personajes.*
 
 
 
@@ -10,14 +11,21 @@ program princesas {
     game.cellSize(50)
 
 	// add assets in asset folder, for example, for the background
-    game.boardGround("cocina/cocinaVistaR3.png")
+    game.boardGround("cocinaVistaR3.png")
 
 	//
 	game.showAttributes(cenicienta) //Debug
 
 	// personajes
 	game.addVisualCharacter(cenicienta)
-
+	
+	barraEstres.iniciar()
+	game.onTick(10000, "subirEstres", {
+		barraEstres.aumentarNivel()
+		if (barraEstres.sufijo == "5") {
+			game.removeTickEvent("subirEstres")
+		}
+	})
 
 	game.start()
 }

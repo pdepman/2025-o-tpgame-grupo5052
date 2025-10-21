@@ -1,4 +1,4 @@
-import wollok.game.*
+/*import wollok.game.*
 import objetos.*
 
 object cocina inherits ElementoDeJuego {
@@ -6,3 +6,4 @@ object cocina inherits ElementoDeJuego {
     var property position = game.origen()
 }
 
+*/
