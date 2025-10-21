@@ -40,7 +40,7 @@ class NivelCocina inherits Nivel {
         game.onTick(10000, "subirEstres", {
             barraEstres.aumentarNivel()
             
-            // ¡NUEVO! Verificar si llegó al máximo
+           
             if (barraEstres.estaAlMaximo()) {
                 game.removeTickEvent("subirEstres")
                 
@@ -89,7 +89,7 @@ class NivelCocina inherits Nivel {
         console.println("Objetos recolectados: " + cantidadObjetos + "/3")
 
         if (cantidadObjetos == 3 && !misionFallida) {
-            // Detener el timer de estrés al completar
+            
             game.removeTickEvent("subirEstres")
             
             game.schedule(2000, {
@@ -108,7 +108,6 @@ class NivelDormitorio inherits Nivel {
         
         barraEstres.iniciar()
         
-        // Timer de estrés para dormitorio
         game.onTick(10000, "subirEstresDormitorio", {
             barraEstres.aumentarNivel()
             

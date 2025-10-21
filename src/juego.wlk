@@ -35,7 +35,6 @@ object juego {
   method irANivel(numeroDeNivel) {
     configuracionCompleta = false
     
-    // Limpiar elementos del nivel anterior
     elementosEnEscena.forEach({ elem => 
       try {
         game.removeVisual(elem)
@@ -44,13 +43,11 @@ object juego {
     })
     elementosEnEscena.clear()
     
-    // Limpiar todo
+    
     game.clear()
     
-    // Agregar cenicienta de nuevo
     game.addVisual(cenicienta)
     
-    // Cargar el nivel
     const nivelACargar = nivelesDelJuego.get(numeroDeNivel)
     nivelActual = numeroDeNivel
     
@@ -155,7 +152,6 @@ object juego {
     })
   }
 
-  // ========== COMPLETAR MISIÓN ==========
   method completarMisionCocina() {
     console.println("¡Misión de la Cocina Completada!")
     
@@ -174,18 +170,22 @@ object juego {
     cenicienta.limpiarObjetos()
     barraEstres.resetear()
     
+    const imagenVictoria = object {
+        var property position = game.at(100, 100) 
+        var property image = "imagenVictoria.png"   
+    }
+    
+    game.addVisual(imagenVictoria)
+    
     game.say(cenicienta, "¡Lograste vencer a las hermanastras!")
     
     /* game.schedule(2000, { 
         self.irANivel(self.nivelActual() + 1) 
     }) */
-  }
-
-  // ========== FALLAR MISIÓN (NUEVO) ==========
+}
   method fallarMisionCocina() {
     console.println("¡Misión de la Cocina Fallida! - Estrés al máximo")
     
-    // Limpiar elementos
     elementosEnEscena.forEach({ elem => 
         try {
             game.removeVisual(elem)
@@ -196,7 +196,6 @@ object juego {
     
     elementosEnEscena.clear()
     
-    // Cambiar a imagen de derrota
     game.boardGround("trampaFallida.png")
     
     cenicienta.limpiarObjetos()
