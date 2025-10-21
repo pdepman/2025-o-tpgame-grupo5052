@@ -8,7 +8,12 @@ object juego {
     var cenicienta
     var elementosEnEscena = new List()
     var tiempo = 45 
+    var nivelActual = 0
 
+    method nivelActual() = nivelActual
+    method nivelActual(_nuevoNivel) {
+        nivelActual = _nuevoNivel
+    }
     // metodo principal que se llama al iniciar
     method iniciar() {
         game.title("Wollok de Cristal")
@@ -56,10 +61,7 @@ object juego {
         }
     }
     //deberiamos tener 5 instacias de nivel
-    /*
-    class nivel {
-        var numeroNivel = 0
-    }*/
+
     method configurarEntrada(){
         game.boardGround("entradaCastillo.png")
         cenicienta.position = game.at(10, 70)
@@ -100,6 +102,70 @@ object juego {
         // const objetoCercano = ...
         // objetoCercano.interactuar(cenicienta)
            
-    }
+    }  
 
 }
+
+
+
+// ---------------------------- NIVELEs, despues se mueven a los arhcivos de los objetos  
+class Nivel {
+    //codigo de nivel
+
+    method alEntrar(_personaje) {
+    game.addVisual(ratones)
+    game.onCollideDo(_personaje, ratones) {
+      ratones.interactuar(_personaje)
+    }
+    }
+
+    method pistaParaRatones() = ""
+    method reduccionEstres() = 0
+}
+
+    // ENTRADA aca no pasa nada
+    object entrada inherits Nivel { }
+
+    // COCINA (pista, sin bajar estrés)
+    object cocina inherits Nivel {
+        //codigo de la cocina
+
+    method iniciar(_personaje) {
+    self.alEntrar(_personaje)    // addVisual + onCollideDo
+    // otras cosas
+    }
+
+    override method pistaParaRatones() =
+        "Hola Ceni, para hacer las trampas:\n" +
+        " - los huevos están en la heladera\n" +
+        " - el aceite está en la mesa"
+
+    override method reduccionEstres() = 0
+    }
+
+    // BAÑO 
+    object banio inherits Nivel {
+        //codigo del banio
+
+    override method pistaParaRatones() =
+        "El jabon en la jabonera, el jabon liquido en el lavamanos, el agua en la bañera."
+    override method reduccionEstres() = 10
+    }
+
+    // DORMITORIO 
+    object dormitorio inherits Nivel {
+            // codigo del dormitorio
+
+    override method pistaParaRatones() =
+        "Las sabanas en la cama, la ropa en el ropero."
+    override method reduccionEstres() = 20
+    }
+
+    // JARDÍN 
+    object jardin inherits Nivel {
+        //codigo del jardin
+
+    override method pistaParaRatones() =
+        "En el mueble la palita para ablandar la tierra y hoja de las masetas."
+    override method reduccionEstres() = 30
+    }

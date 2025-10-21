@@ -1,5 +1,6 @@
 import wollok.game.*
 import objetos.*
+import juego.*
 
 class Personaje inherits ElementoDeJuego {
 
@@ -62,22 +63,22 @@ const cenicienta = new Cenicienta(
     image = "cenicientaPobre.png"
     )
 
-class Raton inherits Personaje  {
-  var property pista
-  override method esInteractuable() = true
+
+object ratones inherits ObjetoInteractuable(
+  position = game.at(20,18),
+  image = "ratones.png"
+) {
   override method interactuar(personaje) {
-    personaje.disminuirEstres(10)
+    // Pide al nivel actual la pista y cuanto deberia reducir del estress
+    var pista = juego.nivelActual().pistaParaRatones()
+    var reduccionEstress = juego.nivelActual().reduccionEstress()
+
+    if (reduccionEstress > 0) personaje.disminuirEstres(reduccionEstress) 
+
     game.say(self, pista)
   }
 }
 
-class Gato inherits Personaje  {
-  override method esInteractuable() = true
-  override method interactuar(personaje) {
-    personaje.aumentarEstres(15)
-    game.say(self, "Miau... (te juzga)")
-  }
-}
 
 class Hermanastra inherits Personaje {
   override method esInteractuable() = true

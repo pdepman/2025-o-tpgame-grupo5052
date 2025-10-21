@@ -10,8 +10,8 @@ import wollok.game.*
 // define lo que CUALQUIER objeto en el juego tiene: una posición y una imagen.
 // ES ABSTACTA POR MAS DE QUEN NOS DEJEN PONERE LA PROP
 class ElementoDeJuego {
-    var property position
-    var property image
+    var position
+    var image
 
     method esPuerta() = false
     method esRelojDeArena() = false
