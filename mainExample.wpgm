@@ -18,8 +18,10 @@ program princesas {
 
 	// personajes
 	game.addVisualCharacter(cenicienta)
-	
+
+
 	barraEstres.iniciar()
+
 	game.onTick(10000, "subirEstres", {
 		barraEstres.aumentarNivel()
 		if (barraEstres.sufijo == "5") {
