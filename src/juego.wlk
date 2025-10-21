@@ -1,105 +1,258 @@
+import barraEstres.*
 import wollok.game.*
 import personajes.*
 import objetos.*
-import reloj.*
+import niveles.*
 
-// objeto 'juego' es el director de orquesta
 object juego {
-    var cenicienta
-    var elementosEnEscena = new List()
-    var tiempo = 45 
-
-    // metodo principal que se llama al iniciar
-    method iniciar() {
-        game.title("Wollok de Cristal")
-        game.height(800)
-        game.width(1000)
-        game.cellSize(50)
-
-        self.configurarNivel1() // 1°nivel
-        //NIVIEL INICIAL OSEA ENTRADA DEL CASTILLO
-        self.irANivel(0)
-        // configuramos los controles del teclado
-        keyboard.space().onPressDo({ self.interactuarConLoCercano() })
-        
-        // configuramos un timer para que el tiempo baje
-        game.onTick(1000, "bajarTiempo", { self.actualizarJuego() })
-        
-        game.start()
-    } 
-
-    //ACA vamos a hacer los diferentes niveles 
-    method irANivel(numeroDeNivel){
-        elementosEnEscena = newList() // mi listra de elementos q se reinicia en cada uno 
-
-        game.addVisual(cenicienta)
-        
-        //deberia ser algo nivel.configurar(numeroDeNivel) 
-        
-        if(numeroDeNivel == 0){
-            self.configurarEntrada()
-        },
-        if(numeroDeNivel == 1){
-            self.configurarCocina()
-        },
-        if (numeroDeNivel == 2){
-            self.configurarBanio()
-        },
-        if (numeroDeNivel == 3){
-            self.configurarBiblioteca()
-        },
-        if (numeroDeNivel == 4){
-            self.configurarJardin()
-        },
-        if (numeroDeNivel == 5){ 
-            self.configurarFinal()
-        }
-    }
-    //deberiamos tener 5 instacias de nivel
-    /*
-    class nivel {
-        var numeroNivel = 0
-    }*/
-    method configurarEntrada(){
-        game.boardGround("entradaCastillo.png")
-        cenicienta.position = game.at(10, 70)
-
-        // ahora voy a hacwer la puerta que conecte con el nivel 1 osea cocina
-        /*const puertaCocina = new Puerta(
-            position = game.at(40,70),
-            image = "aceite.png",
-            nivelDestino = 1,
-        )*/
-        game.addVisual(puertaCocina)
-        elementosEnEscena.add(puertaCocina) //pongo a la puerta como elemento interactrivo
-
-        game.removeTickEvent("bajarTiempo") //xq yo en mi entrada no voy a tener tiempo
-    }
+  var property cenicienta = new Cenicienta(
+    position = game.at(0, 0),
+    image = "cenicientaPobre.png"
+  )
+  var nivelesDelJuego = new List()
+  var elementosEnEscena = new List()
+  var property nivelActual = 0  
+  var configuracionCompleta = false
+  
+  method iniciar() {
+    game.title("Wollok de Cristal")
+    game.height(200)
+    game.width(200)
+    game.cellSize(10)
     
+    game.addVisual(cenicienta)
+    game.showAttributes(cenicienta)
     
-    method actualizarJuego() {
-        tiempo = tiempo - 1
-        // ACA va la logica para verificar si ganó o perdió
-        if (cenicienta.estres() >= 100) { // cenicienta.estaEstresada()
-            game.say(cenicienta, "¡No puedo más! ¡Perdí!")
-            game.stop()
-        }
-        if (tiempo <= 0) {
-            // Lógica para ver si completó la trampa
-            // Si no, pierde.
-        }
-    }
+    nivelesDelJuego.add(new NivelEntrada())
+    nivelesDelJuego.add(new NivelCocina())
+    nivelesDelJuego.add(new NivelDormitorio())
     
-    method aumentarTiempo(segundos) {
-        tiempo = tiempo + segundos
-    }
+    self.irANivel(0)
+    
+    game.start()
+  }
+  
+  method irANivel(numeroDeNivel) {
+    configuracionCompleta = false
+    
+    // Limpiar elementos del nivel anterior
+    elementosEnEscena.forEach({ elem => 
+      try {
+        game.removeVisual(elem)
+      } catch e {
+      }
+    })
+    elementosEnEscena.clear()
+    
+    // Limpiar todo
+    game.clear()
+    
+    // Agregar cenicienta de nuevo
+    game.addVisual(cenicienta)
+    
+    // Cargar el nivel
+    const nivelACargar = nivelesDelJuego.get(numeroDeNivel)
+    nivelActual = numeroDeNivel
+    
+    nivelACargar.configurar(self)
+    
+    self.configurarPersonaje()
+    
+    configuracionCompleta = true
+  }
+  
+  method configurarPersonaje() {
+    keyboard.up().onPressDo({
+      if (configuracionCompleta) {
+        cenicienta.position(cenicienta.position().up(5))
+        self.verificarColisionesCercanas()
+        nivelesDelJuego.get(nivelActual).avanzarNivel(self)
+        game.say(
+          cenicienta,
+          (("Coord x:" + cenicienta.position().x()) + " y:") + cenicienta.position().y()
+        )
+      }
+    })
+    
+    keyboard.down().onPressDo({
+      if (configuracionCompleta) {
+        cenicienta.position(cenicienta.position().down(5))
+        self.verificarColisionesCercanas()
+        nivelesDelJuego.get(nivelActual).avanzarNivel(self)
+        game.say(
+          cenicienta,
+          (("Coord x:" + cenicienta.position().x()) + " y:") + cenicienta.position().y()
+        )
+      }
+    })
+    
+    keyboard.left().onPressDo({
+      if (configuracionCompleta) {
+        cenicienta.position(cenicienta.position().left(5))
+        self.verificarColisionesCercanas()
+        nivelesDelJuego.get(nivelActual).avanzarNivel(self)
+        game.say(
+          cenicienta,
+          (("Coord x:" + cenicienta.position().x()) + " y:") + cenicienta.position().y()
+        )
+      }
+    })
+    
+    keyboard.right().onPressDo({
+      if (configuracionCompleta) {
+        cenicienta.position(cenicienta.position().right(5))
+        self.verificarColisionesCercanas()
+        nivelesDelJuego.get(nivelActual).avanzarNivel(self)
+        game.say(
+          cenicienta,
+          (("Coord x:" + cenicienta.position().x()) + " y:") + cenicienta.position().y()
+        )
+      }
+    })
+  }
+  
+  method agregarElemento(elemento) {
+    elementosEnEscena.add(elemento)
+    game.addVisual(elemento)
+  }
+  
+  method configurarColision(objeto) {
+    game.onCollideDo(cenicienta, { elem =>
+      if (elem == objeto) {
+        objeto.interactuar(cenicienta, self)
+      }
+    })
+  }
+  
+  method estaCerca(objeto, radio) {
+    const distX = (cenicienta.position().x() - objeto.position().x()).abs()
+    const distY = (cenicienta.position().y() - objeto.position().y()).abs()
+    return distX <= radio && distY <= radio
+  }
+  
+  method verificarColisionesCercanas() {
+    elementosEnEscena.forEach({ elem =>
+        if (self.estaCerca(elem, 20)) {
+            elem.interactuar(cenicienta, self)
+        }
+    })
+  }
 
-    method interactuarConLoCercano() {
-        // aca iria para encontrar el objeto 'Interactuable' más cercano a Cenicienta
-        // y llamar a su método interactuar().
-        // const objetoCercano = ...
-        // objetoCercano.interactuar(cenicienta)
-           
-    }
+  method estaCercaDe(objeto, radio) {
+    const distX = (cenicienta.position().x() - objeto.position().x()).abs()
+    const distY = (cenicienta.position().y() - objeto.position().y()).abs()
+    
+    const distancia = ((distX * distX) + (distY * distY)).squareRoot()
+    
+    return distancia <= radio
+  }
+  
+  method cambiarFondo(nombreImagen) {
+    game.boardGround(nombreImagen)
+    game.removeVisual(cenicienta)
+    game.schedule(1, { 
+      game.addVisual(cenicienta)
+    })
+  }
 
+  // ========== COMPLETAR MISIÓN ==========
+  method completarMisionCocina() {
+    console.println("¡Misión de la Cocina Completada!")
+    
+    elementosEnEscena.forEach({ elem => 
+        try {
+            game.removeVisual(elem)
+        } catch e {
+            console.println("Error al remover: " + e)
+        }
+    })
+    
+    elementosEnEscena.clear()
+    
+    game.boardGround("trampaLograda.png") 
+    
+    cenicienta.limpiarObjetos()
+    barraEstres.resetear()
+    
+    game.say(cenicienta, "¡Lograste vencer a las hermanastras!")
+    
+    /* game.schedule(2000, { 
+        self.irANivel(self.nivelActual() + 1) 
+    }) */
+  }
+
+  // ========== FALLAR MISIÓN (NUEVO) ==========
+  method fallarMisionCocina() {
+    console.println("¡Misión de la Cocina Fallida! - Estrés al máximo")
+    
+    // Limpiar elementos
+    elementosEnEscena.forEach({ elem => 
+        try {
+            game.removeVisual(elem)
+        } catch e {
+            console.println("Error al remover: " + e)
+        }
+    })
+    
+    elementosEnEscena.clear()
+    
+    // Cambiar a imagen de derrota
+    game.boardGround("trampaFallida.png")
+    
+    cenicienta.limpiarObjetos()
+    barraEstres.resetear()
+    
+    game.say(cenicienta, "¡El estrés te venció! No pudiste completar la misión a tiempo...")
+    
+    // Opcional: Reiniciar el nivel después de unos segundos
+    /* game.schedule(3000, { 
+        self.irANivel(nivelActual) // Reinicia el mismo nivel
+    }) */
+  }
+
+  method completarMisionDormitorio() {
+    console.println("¡Misión del Dormitorio Completada!")
+    
+    elementosEnEscena.forEach({ elem => 
+        try {
+            game.removeVisual(elem)
+        } catch e {
+            console.println("Error al remover: " + e)
+        }
+    })
+    
+    elementosEnEscena.clear()
+    
+    game.boardGround("trampaLograda.png")
+    
+    cenicienta.limpiarObjetos()
+    barraEstres.resetear()
+    
+    game.say(cenicienta, "¡Completaste el dormitorio!")
+  }
+
+  method fallarMisionDormitorio() {
+    console.println("¡Misión del Dormitorio Fallida! - Estrés al máximo")
+    
+    elementosEnEscena.forEach({ elem => 
+        try {
+            game.removeVisual(elem)
+        } catch e {
+            console.println("Error al remover: " + e)
+        }
+    })
+    
+    elementosEnEscena.clear()
+    
+    game.boardGround("trampaFallida.png")
+    
+    cenicienta.limpiarObjetos()
+    barraEstres.resetear()
+    
+    game.say(cenicienta, "¡El estrés te venció en el dormitorio!")
+  }
+
+  method removerElemento(elemento) {
+    elementosEnEscena.remove(elemento)
+  }
 }

@@ -5,9 +5,9 @@ class Personaje inherits ElementoDeJuego {
 
   // Sobrescribe el setter de position de la superclase
   override method position(_nuevaPosition) {
-    if (self.puedeMoverse(_nuevaPosition)) {
+    // if (self.puedeMoverse(_nuevaPosition)) {
       position = _nuevaPosition
-    }
+    // }
   }
 
   // Sobrescribe el getter de position
@@ -37,26 +37,29 @@ class Personaje inherits ElementoDeJuego {
   }
 }
 
+class Cenicienta {
+    var property position
+    var property image
+    var property estres = 100
+    
+    var objetosRecolectados = new List()
 
-// LA MAIN CHARACTER hereda de Personaje, por lo que ya sabe moverse
-// y tiene posición e imagen.
-class Cenicienta inherits Personaje {
-  var estres = 0
-  const estresMaximo = 100
-  var objetoEnMano = null
-  const prendas = new List()
-
-  method aumentarEstres(cantidad) { estres = (estres + cantidad).min(estresMaximo) }
-  method disminuirEstres(cantidad) { estres = (estres - cantidad).max(0) }
-  method agregarPrenda(prenda) { prendas.add(prenda) }
-  method objetoEnMano() = objetoEnMano
-
-  method agarrar(objeto) {
-    if (self.objetoEnMano() == null) { objetoEnMano = objeto }
-  }
-  method soltar() { objetoEnMano = null }
+    method agarrar(objeto) {
+        objetosRecolectados.add(objeto)
+        console.println("Cenicienta agarró: " + objeto.nombre())
+    }
+    
+    method objetosRecolectados() {
+        return objetosRecolectados
+    }
+    
+    method disminuirEstres(valor) {
+        estres = 0.max(estres - valor)
+    }
+    method limpiarObjetos() {
+        objetosRecolectados.clear()
+    }
 }
-
 const cenicienta = new Cenicienta(
     position = game.at(20, 8), 
     image = "cenicientaPobre.png"
@@ -65,7 +68,7 @@ const cenicienta = new Cenicienta(
 class Raton inherits Personaje  {
   var property pista
   override method esInteractuable() = true
-  override method interactuar(personaje) {
+ method interactuar(personaje) {
     personaje.disminuirEstres(10)
     game.say(self, pista)
   }
@@ -73,7 +76,7 @@ class Raton inherits Personaje  {
 
 class Gato inherits Personaje  {
   override method esInteractuable() = true
-  override method interactuar(personaje) {
+  method interactuar(personaje) {
     personaje.aumentarEstres(15)
     game.say(self, "Miau... (te juzga)")
   }
@@ -81,7 +84,7 @@ class Gato inherits Personaje  {
 
 class Hermanastra inherits Personaje {
   override method esInteractuable() = true
-  override method interactuar(personaje) {
+   method interactuar(personaje) {
     personaje.aumentarEstres(20)
     game.say(self, "¡Te voy a acusar!")
   }
