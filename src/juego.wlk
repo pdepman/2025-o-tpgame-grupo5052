@@ -24,7 +24,7 @@ object juego {
     
     nivelesDelJuego.add(new NivelEntrada())
     nivelesDelJuego.add(new NivelCocina())
-    //nivelesDelJuego.add(new NivelDormitorio())
+    nivelesDelJuego.add(new NivelDormitorio())
     
     self.configurarPersonaje()
     self.irANivel(0)
@@ -110,6 +110,7 @@ object juego {
       game.say(cenicienta, "Coord x:" + cenicienta.position().x() + " y:" + cenicienta.position().y())
     })
   }
+  
   
   method cambiarFondo(nombreImagen) {
     const teniaCenicienta = game.hasVisual(cenicienta)

@@ -41,7 +41,10 @@ class Cenicienta inherits Personaje {
     const nivelBarra = (estres / 20).roundUp().min(5)
     barraEstres.establecerNivel(nivelBarra)
   }
-  
+   method resetearEstres() {
+    estres = 0
+    self.sincronizarBarraEstres()
+  }
   method aumentarEstres(valor) {
     estres = 100.min(estres + valor)
     self.sincronizarBarraEstres()
