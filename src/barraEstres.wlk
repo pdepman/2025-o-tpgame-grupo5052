@@ -12,21 +12,21 @@ object barraEstres {
     
     method iniciar() {
         if (!visualAgregado) {
-          visualAgregado = true
-          sufijo = 0
-          game.addVisual(self)
+            visualAgregado = true
+            sufijo = 0
+            game.addVisual(self)
         }
     }
 
     method detener() {
         if (visualAgregado) {
-          visualAgregado = false
-          game.removeVisual(self)
+            visualAgregado = false
+            game.removeVisual(self)
         }
     }
 
     method aumentarNivel() {
-        if(sufijo < maxNivel){
+        if (sufijo < maxNivel) {
             sufijo = sufijo + 1
         }
     }
@@ -35,6 +35,11 @@ object barraEstres {
         if (sufijo > minNivel) {
             sufijo = sufijo - 1
         }
+    }
+    
+    // para l ode sincro
+    method establecerNivel(nivel) {
+        sufijo = nivel.max(minNivel).min(maxNivel)
     }
     
     method estaAlMaximo() = sufijo >= maxNivel

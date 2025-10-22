@@ -11,101 +11,123 @@ object juego {
   )
   var nivelesDelJuego = new List()
   var elementosEnEscena = new List()
-  var property nivelActual = 0  
-  var configuracionCompleta = false
+  var property nivelActual = 0
+  var fondoActual = null
   
   method iniciar() {
     game.title("Wollok de Cristal")
     game.height(200)
     game.width(200)
     game.cellSize(10)
-    
-    game.addVisual(cenicienta)
-    game.showAttributes(cenicienta)
+
+   
     
     nivelesDelJuego.add(new NivelEntrada())
     nivelesDelJuego.add(new NivelCocina())
-    nivelesDelJuego.add(new NivelDormitorio())
+    //nivelesDelJuego.add(new NivelDormitorio())
     
+    self.configurarPersonaje()
     self.irANivel(0)
     
     game.start()
   }
   
   method irANivel(numeroDeNivel) {
-    configuracionCompleta = false
+    if (game.hasVisual(cenicienta)) {
+      game.removeVisual(cenicienta)
+    }
     
     elementosEnEscena.forEach({ elem => 
-      try {
+      if (game.hasVisual(elem)) {
         game.removeVisual(elem)
-      } catch e {
       }
     })
     elementosEnEscena.clear()
     
-    
-    game.clear()
-    
-    game.addVisual(cenicienta)
+    if (fondoActual != null && game.hasVisual(fondoActual)) {
+      game.removeVisual(fondoActual)
+    }
+    self.detenerEstresPorTiempo()
     
     const nivelACargar = nivelesDelJuego.get(numeroDeNivel)
     nivelActual = numeroDeNivel
-    
     nivelACargar.configurar(self)
-    
-    self.configurarPersonaje()
-    
-    configuracionCompleta = true
   }
-  
+  //no acumuilo
+  method detenerEstresPorTiempo() {
+		game.removeTickEvent("aumentarEstresPorTiempo")
+	}
+
+  method iniciarEstresPorTiempo(misionFallidaCallback) {
+		self.detenerEstresPorTiempo()
+		
+		game.onTick(5000, "aumentarEstresPorTiempo", {
+			
+			cenicienta.aumentarEstres(10) 
+			
+			if (cenicienta.estaAlMaximoEstres()) {
+				self.detenerEstresPorTiempo()
+				
+				misionFallidaCallback.apply()
+			}
+		})
+	}
+
   method configurarPersonaje() {
     keyboard.up().onPressDo({
-      if (configuracionCompleta) {
-        cenicienta.position(cenicienta.position().up(5))
-        self.verificarColisionesCercanas()
+      cenicienta.position(cenicienta.position().up(5))
+      self.verificarColisionesCercanas()
+      if (!nivelesDelJuego.isEmpty()) {
         nivelesDelJuego.get(nivelActual).avanzarNivel(self)
-        game.say(
-          cenicienta,
-          (("Coord x:" + cenicienta.position().x()) + " y:") + cenicienta.position().y()
-        )
       }
+      game.say(cenicienta, "Coord x:" + cenicienta.position().x() + " y:" + cenicienta.position().y())
     })
     
     keyboard.down().onPressDo({
-      if (configuracionCompleta) {
-        cenicienta.position(cenicienta.position().down(5))
-        self.verificarColisionesCercanas()
+      cenicienta.position(cenicienta.position().down(5))
+      self.verificarColisionesCercanas()
+      if (!nivelesDelJuego.isEmpty()) {
         nivelesDelJuego.get(nivelActual).avanzarNivel(self)
-        game.say(
-          cenicienta,
-          (("Coord x:" + cenicienta.position().x()) + " y:") + cenicienta.position().y()
-        )
       }
+      game.say(cenicienta, "Coord x:" + cenicienta.position().x() + " y:" + cenicienta.position().y())
     })
     
     keyboard.left().onPressDo({
-      if (configuracionCompleta) {
-        cenicienta.position(cenicienta.position().left(5))
-        self.verificarColisionesCercanas()
+      cenicienta.position(cenicienta.position().left(5))
+      self.verificarColisionesCercanas()
+      if (!nivelesDelJuego.isEmpty()) {
         nivelesDelJuego.get(nivelActual).avanzarNivel(self)
-        game.say(
-          cenicienta,
-          (("Coord x:" + cenicienta.position().x()) + " y:") + cenicienta.position().y()
-        )
       }
+      game.say(cenicienta, "Coord x:" + cenicienta.position().x() + " y:" + cenicienta.position().y())
     })
     
     keyboard.right().onPressDo({
-      if (configuracionCompleta) {
-        cenicienta.position(cenicienta.position().right(5))
-        self.verificarColisionesCercanas()
+      cenicienta.position(cenicienta.position().right(5))
+      self.verificarColisionesCercanas()
+      if (!nivelesDelJuego.isEmpty()) {
         nivelesDelJuego.get(nivelActual).avanzarNivel(self)
-        game.say(
-          cenicienta,
-          (("Coord x:" + cenicienta.position().x()) + " y:") + cenicienta.position().y()
-        )
       }
+      game.say(cenicienta, "Coord x:" + cenicienta.position().x() + " y:" + cenicienta.position().y())
     })
+  }
+  
+  method cambiarFondo(nombreImagen) {
+    const teniaCenicienta = game.hasVisual(cenicienta)
+    if (teniaCenicienta) {
+      game.removeVisual(cenicienta)
+    }
+    
+    if (fondoActual != null && game.hasVisual(fondoActual)) {
+      game.removeVisual(fondoActual)
+    }
+    
+    fondoActual = object {
+      var property position = game.at(0, 0)
+      var property image = nombreImagen
+    }
+    
+    game.addVisual(fondoActual)
+    game.addVisual(cenicienta)
   }
   
   method agregarElemento(elemento) {
@@ -121,6 +143,12 @@ object juego {
     })
   }
   
+  method agregarCenicienta() {
+    if (!game.hasVisual(cenicienta)) {
+      game.addVisual(cenicienta)
+    }
+  }
+  
   method estaCerca(objeto, radio) {
     const distX = (cenicienta.position().x() - objeto.position().x()).abs()
     const distY = (cenicienta.position().y() - objeto.position().y()).abs()
@@ -129,126 +157,76 @@ object juego {
   
   method verificarColisionesCercanas() {
     elementosEnEscena.forEach({ elem =>
-        if (self.estaCerca(elem, 20)) {
-            elem.interactuar(cenicienta, self)
-        }
+      if (self.estaCerca(elem, 20)) {
+        elem.interactuar(cenicienta, self)
+      }
     })
   }
 
   method estaCercaDe(objeto, radio) {
     const distX = (cenicienta.position().x() - objeto.position().x()).abs()
     const distY = (cenicienta.position().y() - objeto.position().y()).abs()
-    
     const distancia = ((distX * distX) + (distY * distY)).squareRoot()
-    
     return distancia <= radio
   }
-  
-  method cambiarFondo(nombreImagen) {
-    game.boardGround(nombreImagen)
-    game.removeVisual(cenicienta)
-    game.schedule(1, { 
-      game.addVisual(cenicienta)
-    })
-  }
 
-  method completarMisionCocina() {
-    console.println("¡Misión de la Cocina Completada!")
+  method completarMision(imagenVictoria, posicionVictoria, imagenHermanas, posicionHermanas, mensaje) {
+    self.detenerEstresPorTiempo()
     
     elementosEnEscena.forEach({ elem => 
-        try {
-            game.removeVisual(elem)
-        } catch e {
-            console.println("Error al remover: " + e)
-        }
+      if (game.hasVisual(elem)) {
+        game.removeVisual(elem)
+      }
     })
-    
     elementosEnEscena.clear()
-    
-    game.boardGround("trampaLograda.png") 
     
     cenicienta.limpiarObjetos()
     barraEstres.resetear()
     
-    const imagenVictoria = object {
-        var property position = game.at(100, 100) 
-        var property image = "imagenVictoria.png"   
+    const imageVictoria = object {
+      var property position = posicionVictoria
+      var property image = imagenVictoria
+    }
+    game.addVisual(imageVictoria)
+    
+    if (imagenHermanas != "") {
+      const imageHermanas = object {
+        var property position = posicionHermanas
+        var property image = imagenHermanas
+      }
+      game.addVisual(imageHermanas)
     }
     
-    game.addVisual(imagenVictoria)
-    
-    game.say(cenicienta, "¡Lograste vencer a las hermanastras!")
-    
-    /* game.schedule(2000, { 
-        self.irANivel(self.nivelActual() + 1) 
-    }) */
-}
-  method fallarMisionCocina() {
-    console.println("¡Misión de la Cocina Fallida! - Estrés al máximo")
-    
-    elementosEnEscena.forEach({ elem => 
-        try {
-            game.removeVisual(elem)
-        } catch e {
-            console.println("Error al remover: " + e)
-        }
-    })
-    
-    elementosEnEscena.clear()
-    
-    game.boardGround("trampaFallida.png")
-    
-    cenicienta.limpiarObjetos()
-    barraEstres.resetear()
-    
-    game.say(cenicienta, "¡El estrés te venció! No pudiste completar la misión a tiempo...")
-    
-    // Opcional: Reiniciar el nivel después de unos segundos
-    /* game.schedule(3000, { 
-        self.irANivel(nivelActual) // Reinicia el mismo nivel
-    }) */
+    game.say(cenicienta, mensaje)
   }
 
-  method completarMisionDormitorio() {
-    console.println("¡Misión del Dormitorio Completada!")
-    
+  method fallarMision(imagenDerrota, posicionDerrota, imagenHermanas, posicionHermanas, mensaje) {
+    self.detenerEstresPorTiempo()
     elementosEnEscena.forEach({ elem => 
-        try {
-            game.removeVisual(elem)
-        } catch e {
-            console.println("Error al remover: " + e)
-        }
+      if (game.hasVisual(elem)) {
+        game.removeVisual(elem)
+      }
     })
-    
     elementosEnEscena.clear()
-    
-    game.boardGround("trampaLograda.png")
     
     cenicienta.limpiarObjetos()
     barraEstres.resetear()
     
-    game.say(cenicienta, "¡Completaste el dormitorio!")
-  }
-
-  method fallarMisionDormitorio() {
-    console.println("¡Misión del Dormitorio Fallida! - Estrés al máximo")
+    const imageDerrota = object {
+      var property position = posicionDerrota
+      var property image = imagenDerrota
+    }
+    game.addVisual(imageDerrota)
     
-    elementosEnEscena.forEach({ elem => 
-        try {
-            game.removeVisual(elem)
-        } catch e {
-            console.println("Error al remover: " + e)
-        }
-    })
+    if (imagenHermanas != "") {
+      const imageHermanas = object {
+        var property position = posicionHermanas
+        var property image = imagenHermanas
+      }
+      game.addVisual(imageHermanas)
+    }
     
-    elementosEnEscena.clear()
-    
-    game.boardGround("trampaFallida.png")
-    
-    cenicienta.limpiarObjetos()
-    barraEstres.resetear()
-    
-    game.say(cenicienta, "¡El estrés te venció en el dormitorio!")
+    game.say(cenicienta, mensaje)
   }
 
   method removerElemento(elemento) {

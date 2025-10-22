@@ -17,50 +17,9 @@ class ObjetoInteractuable inherits ElementoDeJuego {
     override method esInteractuable() = true
 }
 
-class Mueble inherits ObjetoInteractuable {
-    var nombre = "mueble"
-    var property imagenIntern
-    var objetosOcultos = new List()
 
-    override method interactuar(personaje, juego) {
-        game.say(self, "Aquí dentro encontraste: " + objetosOcultos.join(", "))
-        game.boardGround(imagenIntern)
-    }
 
-    method agregarObjeto(objeto) {
-        objetosOcultos.add(objeto)
-    }
-}
 
-class ObjetoDeTrampa inherits ObjetoInteractuable {
-    var property nombre
-    var yaRecolectado = false
-
-    override method interactuar(personaje, juego) {
-       
-       if(!yaRecolectado){
-
-         console.println("Recolectando objeto: " + nombre)
-            yaRecolectado = true
-            
-            // Agregar al inventario
-            personaje.agarrar(self)
-            personaje.disminuirEstres(5)
-            
-            game.say(personaje, "¡Conseguiste: " + nombre + "!")
-            
-            game.removeVisual(self)
-            
-            juego.removerElemento(self)
-            
-            const cantidadObjetos = personaje.objetosRecolectados().size()
-            
-            game.schedule(1000, {
-                game.say(personaje, "Objetos: " + cantidadObjetos + "/3")
-            })
-       }
-    }
-}
 
 class RelojDeArena inherits ObjetoInteractuable {
     override method interactuar(personaje, juego) {
@@ -76,7 +35,7 @@ class Puerta inherits ObjetoInteractuable {
     override method interactuar(personaje, juego) {
         if (!yaActivada) {
             yaActivada = true
-            console.println("¡Pasando al nivel " + nivelDestino + "!")
+            .println("¡Pasando al nivel " + nivelDestino + "!")
             game.say(personaje, "¡Entrando a la siguiente área!")
             
             game.schedule(500, { 
@@ -89,87 +48,110 @@ class Puerta inherits ObjetoInteractuable {
 class Prenda inherits ElementoDeJuego {}
 class ZapatoDeCristal inherits Prenda {}
 
-class Heladera inherits ObjetoInteractuable {
-    var yaAbierta = false
-    
-    override method interactuar(personaje, juego) {
-        if (!yaAbierta) {
-            yaAbierta = true
-            game.say(self, "Abriste la heladera... ¡Encontraste los huevos!")
+class MuebleConObjetosMision inherits ObjetoInteractuable {
+    //unifico todo
+    var yaAbierto= false
+    var property muebleCerrada 
+    var property muebleAbierta 
+    var property nombreObjeto
+    var property imagenObjetoRecolectable
+    var property posicionObjeto
+    var property mensajeDescubrimiento
+
+   override method interactuar(personaje, juego) {
+        if (!yaAbierto) {
+            yaAbierto = true
+            personaje.disminuirEstres(15)
+            game.say(self, mensajeDescubrimiento)
             
             game.schedule(1000, { 
-                self.image("Huevos.png")
+                self.image(muebleAbierta)
                 
-                const huevo = new ObjetoDeTrampa(
-                    position = game.at(165, 47),  
-                    image = "huevosAgarrar.png",  
-                    nombre = "Huevo"
+                const objetoRecolectable = new ObjetoDeTrampa(
+                    position = posicionObjeto,
+                    image = imagenObjetoRecolectable, 
+                    nombre = nombreObjeto
                 )
                 
-                juego.agregarElemento(huevo)
+                juego.agregarElemento(objetoRecolectable)
                 
                 game.schedule(500, {
-                    game.say(huevo, "¡Recógeme!")
+                    game.say(objetoRecolectable, "¡Recógeme!")
                 })
             })
         }
     }
-}
 
-class MesaAceite inherits ObjetoInteractuable {
-    var yaAbierta = false
-    
+}
+class ObjetoDeTrampa inherits ObjetoInteractuable {
+    var property nombre
+    var yaRecolectado = false
+
     override method interactuar(personaje, juego) {
-        if (!yaAbierta) {
-            yaAbierta = true
-            game.say(self, "¡Encontraste el aceite!")
+        if (!yaRecolectado) {
+            yaRecolectado = true
             
-            game.schedule(1000, { 
-                self.image("aceite.png")
-                
-                const aceite = new ObjetoDeTrampa(
-                    position = game.at(76, 46),
-                    image = "aceiteAgarrar.png", 
-                    nombre = "Aceite"
-                )
-                
-                juego.agregarElemento(aceite)
-                
-                game.schedule(500, {
-                    game.say(aceite, "¡Recógeme!")
-                })
+            personaje.agarrar(self)
+            
+            personaje.disminuirEstres(10)
+            
+            game.say(personaje, "¡Conseguiste: " + nombre + "!")
+            
+            game.removeVisual(self)
+            juego.removerElemento(self)
+            
+            const cantidadObjetos = personaje.objetosRecolectados().size()
+            
+            game.schedule(1000, {
+                game.say(personaje, "Objetos: " + cantidadObjetos + "/3")
             })
         }
     }
 }
-
-class EstanteriaHarina inherits ObjetoInteractuable {
-    var yaAbierta = false
+class ObjetoEstresante inherits ObjetoInteractuable {
+    var property nombre = "objeto peligroso"
+    var property valorEstres = 15
+    var yaActivado = false
     
     override method interactuar(personaje, juego) {
-        if (!yaAbierta) {
-            yaAbierta = true
-            game.say(self, "¡Encontraste la harina!")
+        if (!yaActivado) {
+            yaActivado = true
             
-            game.schedule(1000, { 
-                self.image("estanteriaHarina.png")
-                
-                const harina = new ObjetoDeTrampa(
-                    position = game.at(26, 41),
-                    image = "harinaAgarrar.png", 
-                    nombre = "Harina"
-                )
-                
-                juego.agregarElemento(harina)
-                
-                game.schedule(500, {
-                    game.say(harina, "¡Recógeme!")
-                })
-            })
+            personaje.aumentarEstres(valorEstres)
+            
+            game.say(self, "¡Cuidado! ¡Esto te estresa!")
+            
+            /* game.schedule(1500, {
+                if (game.hasVisual(self)) {
+                    game.removeVisual(self)
+                    juego.removerElemento(self)
+                }
+            }) este por si queremos hac q tipo desaparezca depsues d tocarlo*/
         }
     }
 }
 
-class ListaMision inherits ObjetoInteractuable {
+class ObjetoDesestresante inherits ObjetoInteractuable {
+    var property nombre = "objeto relajante"
+    var property valorDesestres = 20
+    var yaActivado = false
+    
+    override method interactuar(personaje, juego) {
+        if (!yaActivado) {
+            yaActivado = true
+            
+            personaje.disminuirEstres(valorDesestres)
+            
+            game.say(self, "¡Te relajaste un poco!")
+            
+            game.schedule(1500, {
+                if (game.hasVisual(self)) {
+                    game.removeVisual(self)
+                    juego.removerElemento(self)
+                }
+            })
+        }
+    }
+}class ListaMision inherits ObjetoInteractuable {
     var yaAbierta = true
 }

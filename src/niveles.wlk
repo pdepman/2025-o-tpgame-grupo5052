@@ -5,15 +5,22 @@ import barraEstres.*
 class Nivel {
     method configurar(juego)
     method avanzarNivel(juego)
+    method imagenVictoria()
+    method posicionImagenVictoria()
+    method imagenHermanasVictoria()
+    method posicionImagenHermanasVictoria()
+    method mensajeVictoria()
+    method imagenDerrota()
+    method posicionImagenDerrota()
+    method imagenHermanasDerrota()
+    method posicionImagenHermanasDerrota()
+    method mensajeDerrota()
 }
 
 class NivelEntrada inherits Nivel {
     override method configurar(juego) {
-        console.println("Configurando Nivel: Entrada del Castillo")
-        
-        game.boardGround("entradaCastillo.png")
+        juego.cambiarFondo("nivelEntradaFondo.jpeg") 
         juego.cenicienta().position(game.at(1, 1))
-        
         game.say(juego.cenicienta(), "¡Bienvenida a la entrada del castillo!")
     }
 
@@ -25,121 +32,125 @@ class NivelEntrada inherits Nivel {
             juego.irANivel(1)
         }
     }
+
+    override method imagenVictoria() = ""
+    override method posicionImagenVictoria() = game.at(0, 0)
+    override method imagenHermanasVictoria() = ""
+    override method posicionImagenHermanasVictoria() = game.at(0, 0)
+    override method mensajeVictoria() = ""
+    override method imagenDerrota() = ""
+    override method posicionImagenDerrota() = game.at(0, 0)
+    override method imagenHermanasDerrota() = ""
+    override method posicionImagenHermanasDerrota() = game.at(0, 0)
+    override method mensajeDerrota() = ""
 }
 
 class NivelCocina inherits Nivel {
     var misionFallida = false
     
     override method configurar(juego) {
-        console.println("Configurando Nivel: Cocina")
         misionFallida = false
         
+        juego.cambiarFondo("nivelCocinaFondo.jpeg")
         barraEstres.iniciar()
 
-        // Timer de estrés
-        game.onTick(10000, "subirEstres", {
-            barraEstres.aumentarNivel()
-            
-           
-            if (barraEstres.estaAlMaximo()) {
-                game.removeTickEvent("subirEstres")
-                
-                if (!misionFallida) {
-                    misionFallida = true
-                    juego.fallarMisionCocina()
-                }
-            }
-        })
-
-        game.boardGround("cocinaVistaR3.png")
-        juego.cenicienta().position(game.at(1, 1))
+       juego.iniciarEstresPorTiempo({
+			if (!misionFallida) {
+				misionFallida = true
+				juego.fallarMision(
+					self.imagenDerrota(),
+					self.posicionImagenDerrota(),
+					self.imagenHermanasDerrota(),
+					self.posicionImagenHermanasDerrota(),
+					self.mensajeDerrota()
+				)
+			}
+		})
 
         const listaMision = new ListaMision (
             position = game.at(156,146),
-            image= "misionCocina.png"
+            image = "misionCocina.png"
         )
         juego.agregarElemento(listaMision)
 
-        const heladera = new Heladera(
+        const heladera = new MuebleConObjetosMision(
             position = game.at(156, 51), 
-            image = "heladeraSola.png"
+            image = "heladeraSola.png",
+            muebleCerrada = "heladeraSola.png",
+            muebleAbierta = "Huevos.png",
+            nombreObjeto = "Huevo",
+            imagenObjetoRecolectable = "huevosAgarrar.png",
+            posicionObjeto = game.at(148, 31),
+            mensajeDescubrimiento = "Abriste la heladera... ¡Encontraste los huevos!"
         )
         juego.agregarElemento(heladera)
 
-        const mesaAceite = new MesaAceite(
-            position = game.at(76, 46), 
-            image = "aceiteSolo.png"
+        const mesaAceite = new MuebleConObjetosMision(
+            position = game.at(71, 51), 
+            image = "aceiteSolo.png",
+            muebleCerrada = "aceiteSolo.png",
+            muebleAbierta = "nivelCocinaMuebleAbierta_Aceite.png",
+            nombreObjeto = "Aceite",
+            imagenObjetoRecolectable = "nivelCocinaObjetoRecolectable_Aceite.jpeg",
+            posicionObjeto = game.at(76, 46),
+            mensajeDescubrimiento = "¡Encontraste el aceite!"
         )
         juego.agregarElemento(mesaAceite)
 
-        const estanteriaHarina = new EstanteriaHarina(
-            position = game.at(3, 56), 
-            image = "estanteriaSola.png"
+        const estanteriaHarina = new MuebleConObjetosMision(
+            position = game.at(3, 53), 
+            image = "estanteriaSola.png",
+            muebleCerrada = "estanteriaSola.png",
+            muebleAbierta = "estanteriaHarina.png",
+            nombreObjeto = "Harina",
+            imagenObjetoRecolectable = "harinaAgarrar.png",
+            posicionObjeto = game.at(26, 41),
+            mensajeDescubrimiento = "¡Encontraste la harina!"
         )
         juego.agregarElemento(estanteriaHarina)
 
         game.say(juego.cenicienta(), "¡Es hora de encontrar tus objetos!")
-    }
 
-    override method avanzarNivel(juego) {
-        console.println("Avanzando al siguiente nivel desde la Cocina")
+        const escoba = new ObjetoEstresante(
+            position = game.at(111, 21),
+            image = "nivelCocinaObjetoEstresante_Escoba.png",
+            nombre = "Escoba sucia",
+            valorEstres = 10
+        )
+        juego.agregarElemento(escoba)
 
-        const personaje = juego.cenicienta()
-        const cantidadObjetos = personaje.objetosRecolectados().size()
-        console.println("Objetos recolectados: " + cantidadObjetos + "/3")
-
-        if (cantidadObjetos == 3 && !misionFallida) {
-            
-            game.removeTickEvent("subirEstres")
-            
-            game.schedule(2000, {
-                juego.completarMisionCocina()
-            })
-        }
-    }
-}
-
-class NivelDormitorio inherits Nivel {
-    var misionFallida = false
-    
-    override method configurar(juego) {
-        console.println("Configurando Nivel: Dormitorio")
-        misionFallida = false
-        
-        barraEstres.iniciar()
-        
-        game.onTick(10000, "subirEstresDormitorio", {
-            barraEstres.aumentarNivel()
-            
-            if (barraEstres.estaAlMaximo()) {
-                game.removeTickEvent("subirEstresDormitorio")
-                
-                if (!misionFallida) {
-                    misionFallida = true
-                    juego.fallarMisionDormitorio()
-                }
-            }
-        })
-
-        game.boardGround("dormitorioVistaR3.png")
         juego.cenicienta().position(game.at(1, 1))
-
-        game.say(juego.cenicienta(), "¡Es hora de encontrar tus objetos!")
     }
 
     override method avanzarNivel(juego) {
-        console.println("Avanzando al siguiente nivel desde el Dormitorio")
-
         const personaje = juego.cenicienta()
         const cantidadObjetos = personaje.objetosRecolectados().size()
-        console.println("Objetos recolectados: " + cantidadObjetos + "/3")
 
-        if (cantidadObjetos == 3 && !misionFallida) {
-            game.removeTickEvent("subirEstresDormitorio")
+        if (cantidadObjetos == 3) {
+           
             
             game.schedule(2000, {
-                juego.completarMisionDormitorio()
+                juego.completarMision(
+                    self.imagenVictoria(),
+                    self.posicionImagenVictoria(),
+                    self.imagenHermanasVictoria(),
+                    self.posicionImagenHermanasVictoria(),
+                    self.mensajeVictoria()
+                )
             })
         }
     }
+
+    override method imagenVictoria() = "imagenVictoria.png"
+    override method posicionImagenVictoria() = game.at(78, 86)
+    override method imagenHermanasVictoria() = "nivelCocinaHermanasCumplido.png"
+    override method posicionImagenHermanasVictoria() = game.at(0, 0)
+    override method mensajeVictoria() = "¡Lograste vencer a las hermanastras!"
+    
+    override method imagenDerrota() = "derrota.png"
+    override method posicionImagenDerrota() = game.at(50, 90)
+    override method imagenHermanasDerrota() = "hermanas.png"
+    override method posicionImagenHermanasDerrota() = game.at(0, 0)
+    override method mensajeDerrota() = "¡El estrés te venció! No pudiste completar la misión a tiempo..."
 }
+
