@@ -82,6 +82,16 @@ class MuebleConObjetosMision inherits ObjetoInteractuable {
         }
     }
 
+}class MuebleEnganioso inherits ObjetoInteractuable {
+    var property muebleEnganio
+    var property mensajeEnganio
+
+   override method interactuar(personaje, juego) {
+            
+            game.say(self, mensajeEnganio)  
+        
+    }
+
 }
 class ObjetoDeTrampa inherits ObjetoInteractuable {
     var property nombre

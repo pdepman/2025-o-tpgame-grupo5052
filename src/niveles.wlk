@@ -206,25 +206,25 @@ class NivelDormitorio inherits Nivel {
         juego.agregarElemento(listaMision)
 
         const cama = new MuebleConObjetosMision(
-            position = game.at(81, 86), 
+            position = game.at(76, 81), 
             image = "nivelDormitorioMuebleCerrado_Cama.png",
             muebleCerrada = "nivelDormitorioMuebleCerrado_Cama.png",
             muebleAbierta = "nivelDormitorioMuebleAbierto_Cama.png",
             nombreObjeto = "frazada",
             imagenObjetoRecolectable = "nivelDormitorioObjetoDesestresante_frazada.png",
-            posicionObjeto = game.at(148, 31),
+            posicionObjeto = game.at(76, 60),
             mensajeDescubrimiento = "¡Encontraste la frazada!"
         )
         juego.agregarElemento(cama)
 
         const placard = new MuebleConObjetosMision(
-            position = game.at(156, 51), 
+            position = game.at(161, 56), 
             image = "nivelDormitorioMuebleCerrado_Placard.png",
             muebleCerrada = "nivelDormitorioMuebleCerrado_Placard.png",
-            muebleAbierta = "nivelDormitorioMuebleAbiertp_Placard.png",
+            muebleAbierta = "nivelDormitorioMuebleAbierto_Placard.png",
             nombreObjeto = "costurero",
             imagenObjetoRecolectable = "nivelDormitorioObjetoDesestresante_costurero.png",
-            posicionObjeto = game.at(76, 46),
+            posicionObjeto = game.at(136, 41),
             mensajeDescubrimiento = "¡Encontraste el Costurero!"
         )
         juego.agregarElemento(placard)
@@ -240,12 +240,32 @@ class NivelDormitorio inherits Nivel {
         juego.agregarElemento(ropa)
 
         const collares = new ObjetoEstresante(
-            position = game.at(50, 50),
+            position = game.at(66, 51),
             image = "nivelDormitorioObjetoEstresante_Collar.png",
             nombre = "Collares desordenados",
             valorEstres = 10
         )
         juego.agregarElemento(collares)
+
+       const espejo = new MuebleEnganioso (
+            position = game.at(126, 71), 
+            image = "nivelDormitorioMuebleXDdd.png",
+            muebleEnganio = "nivelDormitorioMuebleXDdd.png", 
+            mensajeEnganio = "Aca no hay nada..."
+       )
+       juego.agregarElemento(espejo)
+       
+       
+        const sillonAcostado = new MuebleEnganioso (
+            position = game.at(36, 26), 
+            image = "nivelDormitorioMuebleXD.png",
+            muebleEnganio = "nivelDormitorioMuebleXD.png", 
+            mensajeEnganio = "Aca no hay nada..."
+       )
+              juego.agregarElemento(sillonAcostado)
+
+       
+       
 
         juego.cenicienta().position(game.at(1, 1))
     }
