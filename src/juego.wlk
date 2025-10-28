@@ -25,6 +25,8 @@ object juego {
     nivelesDelJuego.add(new NivelEntrada())
     nivelesDelJuego.add(new NivelCocina())
     nivelesDelJuego.add(new NivelDormitorio())
+    nivelesDelJuego.add(new NivelBanio())
+    //jadin
     
     self.configurarPersonaje()
     self.irANivel(0)
@@ -33,26 +35,35 @@ object juego {
   }
   
   method irANivel(numeroDeNivel) {
-    if (game.hasVisual(cenicienta)) {
-      game.removeVisual(cenicienta)
-    }
-    
-    elementosEnEscena.forEach({ elem => 
-      if (game.hasVisual(elem)) {
-        game.removeVisual(elem)
-      }
-    })
-    elementosEnEscena.clear()
-    
-    if (fondoActual != null && game.hasVisual(fondoActual)) {
-      game.removeVisual(fondoActual)
-    }
-    self.detenerEstresPorTiempo()
-    
-    const nivelACargar = nivelesDelJuego.get(numeroDeNivel)
-    nivelActual = numeroDeNivel
-    nivelACargar.configurar(self)
+  if (game.hasVisual(cenicienta)) {
+    game.removeVisual(cenicienta)
   }
+  
+  elementosEnEscena.forEach({ elem => 
+    if (game.hasVisual(elem)) {
+      game.removeVisual(elem)
+    }
+  })
+  elementosEnEscena.clear()
+  
+  if (fondoActual != null && game.hasVisual(fondoActual)) {
+    game.removeVisual(fondoActual)
+  }
+  
+  // saco la barra temporalmente
+  if (game.hasVisual(barraEstres)) {
+    game.removeVisual(barraEstres)
+  }
+  
+  self.detenerEstresPorTiempo()
+  
+  const nivelACargar = nivelesDelJuego.get(numeroDeNivel)
+  nivelActual = numeroDeNivel
+  nivelACargar.configurar(self)
+  
+  // la sumo la barra AL FINAL para que quede encima
+  game.addVisual(barraEstres)
+}
   //no acumuilo
   method detenerEstresPorTiempo() {
 		game.removeTickEvent("aumentarEstresPorTiempo")
@@ -171,64 +182,37 @@ object juego {
     return distancia <= radio
   }
 
-  method completarMision(imagenVictoria, posicionVictoria, imagenHermanas, posicionHermanas, mensaje) {
+  method mostrarPantallaResultado(pantalla) {
     self.detenerEstresPorTiempo()
     
     elementosEnEscena.forEach({ elem => 
-      if (game.hasVisual(elem)) {
-        game.removeVisual(elem)
-      }
+        if (game.hasVisual(elem)) {
+            game.removeVisual(elem)
+        }
     })
     elementosEnEscena.clear()
     
     cenicienta.limpiarObjetos()
     barraEstres.resetear()
     
-    const imageVictoria = object {
-      var property position = posicionVictoria
-      var property image = imagenVictoria
+    const imagePrincipal = object {
+        var property position = pantalla.posicionPrincipal()
+        var property image = pantalla.imagenPrincipal()
     }
-    game.addVisual(imageVictoria)
+    game.addVisual(imagePrincipal)
     
-    if (imagenHermanas != "") {
-      const imageHermanas = object {
-        var property position = posicionHermanas
-        var property image = imagenHermanas
-      }
-      game.addVisual(imageHermanas)
+    if (pantalla.imagenSecundaria() != "") {
+        const imageHermanas = object {
+            var property position = pantalla.posicionSecundaria()
+            var property image = pantalla.imagenSecundaria()
+        }
+        game.addVisual(imageHermanas)
     }
     
-    game.say(cenicienta, mensaje)
-  }
+    game.say(cenicienta, pantalla.mensaje())
+}
 
-  method fallarMision(imagenDerrota, posicionDerrota, imagenHermanas, posicionHermanas, mensaje) {
-    self.detenerEstresPorTiempo()
-    elementosEnEscena.forEach({ elem => 
-      if (game.hasVisual(elem)) {
-        game.removeVisual(elem)
-      }
-    })
-    elementosEnEscena.clear()
-    
-    cenicienta.limpiarObjetos()
-    barraEstres.resetear()
-    
-    const imageDerrota = object {
-      var property position = posicionDerrota
-      var property image = imagenDerrota
-    }
-    game.addVisual(imageDerrota)
-    
-    if (imagenHermanas != "") {
-      const imageHermanas = object {
-        var property position = posicionHermanas
-        var property image = imagenHermanas
-      }
-      game.addVisual(imageHermanas)
-    }
-    
-    game.say(cenicienta, mensaje)
-  }
+ 
 
   method removerElemento(elemento) {
     elementosEnEscena.remove(elemento)

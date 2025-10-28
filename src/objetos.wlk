@@ -76,13 +76,15 @@ class MuebleConObjetosMision inherits ObjetoInteractuable {
                 juego.agregarElemento(objetoRecolectable)
                 
                 game.schedule(500, {
-                    game.say(objetoRecolectable, "¡Recógeme!")
+                    game.say(objetoRecolectable, "¡Agarrame!")
                 })
             })
         }
     }
 
-}class MuebleEnganioso inherits ObjetoInteractuable {
+}
+
+class MuebleEnganioso inherits ObjetoInteractuable {
     var property muebleEnganio
     var property mensajeEnganio
 
