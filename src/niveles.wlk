@@ -289,7 +289,7 @@ class NivelBanio inherits NivelConMision {
         juego.agregarElemento(ducha)
 
         const espejoBanio = new MuebleConObjetosMision(
-            position = game.at(161, 56), 
+            position = game.at(151, 56), 
             image = "nivelBanioMuebleCerrado.png",
             muebleCerrada = "nivelBanioMuebleCerrado.png",
             muebleAbierta = "nivelBanioMuebleAbierto.png",
@@ -301,6 +301,22 @@ class NivelBanio inherits NivelConMision {
         juego.agregarElemento(espejoBanio)
 
         game.say(juego.cenicienta(), "¡Es hora de encontrar tus objetos!")
+
+        const bacha = new MuebleEnganioso (
+            position = game.at(126, 71), 
+            image = "nivelBanioEnganio1.png",
+            muebleEnganio = "nivelBanioEnganio1.png", 
+            mensajeEnganio = "Aca no hay nada..."
+       )
+       juego.agregarElemento(bacha)
+
+       const futon = new MuebleEnganioso (
+            position = game.at(36, 26), 
+            image = "nivelBanioEnganio2.png",
+            muebleEnganio = "nivelBanioEnganio2.png", 
+            mensajeEnganio = "Aca no hay nada..."
+       )
+       juego.agregarElemento(futon)
 
         const toallas = new ObjetoEstresante(
             position = game.at(111, 21),
