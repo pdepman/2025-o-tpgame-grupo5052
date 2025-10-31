@@ -26,7 +26,8 @@ object juego {
     nivelesDelJuego.add(new NivelCocina())
     nivelesDelJuego.add(new NivelDormitorio())
     nivelesDelJuego.add(new NivelBanio())
-    //jadin
+    nivelesDelJuego.add(new NivelJardin())
+    //final
     
     self.configurarPersonaje()
     self.irANivel(0)
@@ -83,44 +84,31 @@ object juego {
 			}
 		})
 	}
+method configurarPersonaje() {
+   keyboard.up().onPressDo({
+     cenicienta.position(cenicienta.position().up(10))  // era 5
+     self.verificarColisionesCercanas()
+     nivelesDelJuego.get(nivelActual).avanzarNivel(self)
+   })
+ 
+   keyboard.down().onPressDo({
+     cenicienta.position(cenicienta.position().down(10))  // era 5
+     self.verificarColisionesCercanas()
+     nivelesDelJuego.get(nivelActual).avanzarNivel(self)
+   })
 
-  method configurarPersonaje() {
-    keyboard.up().onPressDo({
-      cenicienta.position(cenicienta.position().up(5))
-      self.verificarColisionesCercanas()
-      if (!nivelesDelJuego.isEmpty()) {
-        nivelesDelJuego.get(nivelActual).avanzarNivel(self)
-      }
-      game.say(cenicienta, "Coord x:" + cenicienta.position().x() + " y:" + cenicienta.position().y())
-    })
-    
-    keyboard.down().onPressDo({
-      cenicienta.position(cenicienta.position().down(5))
-      self.verificarColisionesCercanas()
-      if (!nivelesDelJuego.isEmpty()) {
-        nivelesDelJuego.get(nivelActual).avanzarNivel(self)
-      }
-      game.say(cenicienta, "Coord x:" + cenicienta.position().x() + " y:" + cenicienta.position().y())
-    })
-    
-    keyboard.left().onPressDo({
-      cenicienta.position(cenicienta.position().left(5))
-      self.verificarColisionesCercanas()
-      if (!nivelesDelJuego.isEmpty()) {
-        nivelesDelJuego.get(nivelActual).avanzarNivel(self)
-      }
-      game.say(cenicienta, "Coord x:" + cenicienta.position().x() + " y:" + cenicienta.position().y())
-    })
-    
-    keyboard.right().onPressDo({
-      cenicienta.position(cenicienta.position().right(5))
-      self.verificarColisionesCercanas()
-      if (!nivelesDelJuego.isEmpty()) {
-        nivelesDelJuego.get(nivelActual).avanzarNivel(self)
-      }
-      game.say(cenicienta, "Coord x:" + cenicienta.position().x() + " y:" + cenicienta.position().y())
-    })
-  }
+   keyboard.left().onPressDo({
+     cenicienta.position(cenicienta.position().left(10))  // era 5
+     self.verificarColisionesCercanas()
+     nivelesDelJuego.get(nivelActual).avanzarNivel(self)
+   })
+
+   keyboard.right().onPressDo({
+     cenicienta.position(cenicienta.position().right(10))  // era 5
+     self.verificarColisionesCercanas()
+     nivelesDelJuego.get(nivelActual).avanzarNivel(self)
+   })
+}
   
   
   method cambiarFondo(nombreImagen) {
