@@ -3,7 +3,7 @@ import wollok.game.*
 import personajes.*
 import objetos.*
 import niveles.*
-
+import nivelFactory.*
 object juego {
   var property cenicienta = new Cenicienta(
     position = game.at(0, 0),
@@ -15,25 +15,26 @@ object juego {
   var fondoActual = null
   
   method iniciar() {
-    game.title("Wollok de Cristal")
-    game.height(200)
-    game.width(200)
-    game.cellSize(10)
-
-   
-    
-    nivelesDelJuego.add(new NivelEntrada())
-    nivelesDelJuego.add(new NivelCocina())
-    nivelesDelJuego.add(new NivelDormitorio())
-    nivelesDelJuego.add(new NivelBanio())
-    nivelesDelJuego.add(new NivelJardin())
-    //final
-    
-    self.configurarPersonaje()
-    self.irANivel(0)
-    
-    game.start()
-  }
+        game.title("Wollok de Cristal")
+        game.height(200)
+        game.width(200)
+        game.cellSize(10)
+        
+        // 2. Llenamos la lista de niveles usando el Factory
+        nivelesDelJuego.add(new NivelEntrada())
+        
+        nivelesDelJuego.add(nivelFactory.crearNivelCocina())
+        nivelesDelJuego.add(nivelFactory.crearNivelDormitorio())
+        nivelesDelJuego.add(nivelFactory.crearNivelBanio())
+        nivelesDelJuego.add(nivelFactory.crearNivelJardin())
+        
+        nivelesDelJuego.add(new NivelFinal())
+        
+        self.configurarPersonaje()
+        self.irANivel(0)
+        
+        game.start()
+    }
   
   method irANivel(numeroDeNivel) {
   if (game.hasVisual(cenicienta)) {
@@ -71,7 +72,7 @@ object juego {
 	}
 
   method iniciarEstresPorTiempo(misionFallidaCallback) {
-		self.detenerEstresPorTiempo()
+		self.detenerEstresPorTiempo() //no estoy pasando un objeto, estoy pasando una funcion :(
 		
 		game.onTick(5000, "aumentarEstresPorTiempo", {
 			
@@ -89,24 +90,32 @@ method configurarPersonaje() {
      cenicienta.position(cenicienta.position().up(10))  // era 5
      self.verificarColisionesCercanas()
      nivelesDelJuego.get(nivelActual).avanzarNivel(self)
+           game.say(cenicienta, "Coord x:" + cenicienta.position().x() + " y:" + cenicienta.position().y())
+
    })
  
    keyboard.down().onPressDo({
      cenicienta.position(cenicienta.position().down(10))  // era 5
      self.verificarColisionesCercanas()
      nivelesDelJuego.get(nivelActual).avanzarNivel(self)
+           game.say(cenicienta, "Coord x:" + cenicienta.position().x() + " y:" + cenicienta.position().y())
+
    })
 
    keyboard.left().onPressDo({
      cenicienta.position(cenicienta.position().left(10))  // era 5
      self.verificarColisionesCercanas()
      nivelesDelJuego.get(nivelActual).avanzarNivel(self)
+           game.say(cenicienta, "Coord x:" + cenicienta.position().x() + " y:" + cenicienta.position().y())
+
    })
 
    keyboard.right().onPressDo({
      cenicienta.position(cenicienta.position().right(10))  // era 5
      self.verificarColisionesCercanas()
      nivelesDelJuego.get(nivelActual).avanzarNivel(self)
+           game.say(cenicienta, "Coord x:" + cenicienta.position().x() + " y:" + cenicienta.position().y())
+
    })
 }
   

@@ -4,8 +4,8 @@ import barraEstres.*
 import pantallas.*
 //clase abstact
 class Nivel {
-    var misionFallida = false    
-    var misionCompletada = false
+    var misionFallida = false    //sacar
+    var misionCompletada = false //sacar
     method configurar(juego)
     method avanzarNivel(juego)
 
@@ -16,6 +16,8 @@ class Nivel {
     method imagenListaMision()
     method configurarObjetos(juego)
     method cantidadObjetosMision()
+
+    method necesitaBarraEstres() = false
 }
 
 class NivelEntrada inherits Nivel {
@@ -34,6 +36,7 @@ class NivelEntrada inherits Nivel {
         }
     }
 
+
     override method pantallaVictoria() = null
     override method pantallaDerrota() = null
     override method fondoNivel() = ""
@@ -43,418 +46,171 @@ class NivelEntrada inherits Nivel {
 
 }
 class NivelConMision inherits Nivel {
-    //esqueleto de la configuracion
-    override method configurar(juego) {
-        //reseteo estado
-        misionFallida = false
-        misionCompletada = false
-        juego.cenicienta().resetearEstres()
-        
-        juego.cambiarFondo(self.fondoNivel()) 
-        
-        game.schedule(100, { barraEstres.iniciar() })
-        if (!game.hasVisual(barraEstres)) {
-            game.addVisual(barraEstres)
-        }
-        
-        juego.iniciarEstresPorTiempo({
-            if (!misionFallida && !misionCompletada) {
-                misionFallida = true
-                juego.mostrarPantallaResultado(self.pantallaDerrota())
 
-                game.schedule(3500, {
-                juego.irANivel(juego.nivelActual())
-            })//reinmciie el nibel
-            }
+    //hago las PROPs para mis datos
+    var property fondoNivel
+    var property imagenListaMision
+    var property cantidadObjetosMision
+    
+    //listas con los DATOS para el factory
+    var property objetosDeMisionData = []
+    var property objetosEstresantesData = []
+    var property mueblesEnganiososData = []
+    
+    //data pantallas
+    var property pantallaVictoriaData
+    var property pantallaDerrotaData
+    
+
+    override method necesitaBarraEstres() = true
+    
+    //el fondoNivel() ahora method que DEVUELVE la prop y asi resto
+    override method fondoNivel() = fondoNivel 
+    override method imagenListaMision() = imagenListaMision
+    override method cantidadObjetosMision() = cantidadObjetosMision
+
+    //lee las dataLists y crea objetos
+    override method configurarObjetos(juego) {
+        
+        objetosDeMisionData.forEach({ data =>
+            const mueble = new MuebleConObjetosMision(
+                position = data.position(),
+                image = data.image(),
+                muebleCerrada = data.muebleCerrada(),
+                muebleAbierta = data.muebleAbierta(),
+                nombreObjeto = data.nombreObjeto(),
+                imagenObjetoRecolectable = data.imagenObjetoRecolectable(),
+                posicionObjeto = data.posicionObjeto(),
+                mensajeDescubrimiento = data.mensajeDescubrimiento()
+            )
+            juego.agregarElemento(mueble)
         })
-        
-        const listaMision = new ListaMision (
-            position = game.at(156,146),
-            image = self.imagenListaMision() 
-        )
-        juego.agregarElemento(listaMision)
-        
-        self.configurarObjetos(juego) 
-        
-        game.say(juego.cenicienta(), "¡Es hora de encontrar tus objetos!")
-        juego.cenicienta().position(game.at(1, 1))
+
+        objetosEstresantesData.forEach({ data =>
+            const objeto = new ObjetoEstresante(
+                position = data.position(),
+                image = data.image(),
+                nombre = data.nombre(),
+                valorEstres = data.valorEstres()
+            )
+            juego.agregarElemento(objeto)
+        })
+
+        mueblesEnganiososData.forEach({ data =>
+            const mueble = new MuebleEnganioso(
+                position = data.position(),
+                image = data.image(),
+                muebleEnganio = data.muebleEnganio(),
+                mensajeEnganio = data.mensajeEnganio()
+            )
+            juego.agregarElemento(mueble)
+        })
     }
     
-    override method avanzarNivel(juego) {
-        const personaje = juego.cenicienta()
-        const cantidadObjetos = personaje.objetosRecolectados().size()
-
-        // cuntos objetos son
-        if (cantidadObjetos == self.cantidadObjetosMision() && !misionCompletada) {
-            misionCompletada = true
-            juego.detenerEstresPorTiempo()
-            
-            //llamo al nuevo metodo del juego
-            game.schedule(500, {
-                juego.mostrarPantallaResultado(self.pantallaVictoria())
-            })
-            
-            //espera y avanza
-            game.schedule(3500, {
-                juego.irANivel(juego.nivelActual() + 1)
-            })
-        }
-    }
-}
-class NivelCocina inherits NivelConMision {
-    override method fondoNivel() = "nivelCocinaFondo.jpeg"
-    override method imagenListaMision() = "misionCocina.png"
-    override method cantidadObjetosMision() = 3
-    
-    override method configurarObjetos(juego) {
-       
-        const heladera = new MuebleConObjetosMision(
-            position = game.at(156, 51), 
-            image = "heladeraSola.png",
-            muebleCerrada = "heladeraSola.png",
-            muebleAbierta = "Huevos.png",
-            nombreObjeto = "Huevo",
-            imagenObjetoRecolectable = "huevosAgarrar.png",
-            posicionObjeto = game.at(148, 31),
-            mensajeDescubrimiento = "Abriste la heladera... ¡Encontraste los huevos!"
-        )
-        juego.agregarElemento(heladera)
-
-        const mesaAceite = new MuebleConObjetosMision(
-            position = game.at(71, 51), 
-            image = "aceiteSolo.png",
-            muebleCerrada = "aceiteSolo.png",
-            muebleAbierta = "nivelCocinaMuebleAbierta_Aceite.png",
-            nombreObjeto = "Aceite",
-            imagenObjetoRecolectable = "nivelCocinaObjetoRecolectable_Aceite.jpeg",
-            posicionObjeto = game.at(76, 46),
-            mensajeDescubrimiento = "¡Encontraste el aceite!"
-        )
-        juego.agregarElemento(mesaAceite)
-
-        const estanteriaHarina = new MuebleConObjetosMision(
-            position = game.at(3, 53), 
-            image = "estanteriaSola.png",
-            muebleCerrada = "estanteriaSola.png",
-            muebleAbierta = "estanteriaHarina.png",
-            nombreObjeto = "Harina",
-            imagenObjetoRecolectable = "harinaAgarrar.png",
-            posicionObjeto = game.at(26, 41),
-            mensajeDescubrimiento = "¡Encontraste la harina!"
-        )
-        juego.agregarElemento(estanteriaHarina)
-
-        game.say(juego.cenicienta(), "¡Es hora de encontrar tus objetos!")
-
-        const escoba = new ObjetoEstresante(
-            position = game.at(111, 21),
-            image = "nivelCocinaObjetoEstresante_Escoba.png",
-            nombre = "Escoba sucia",
-            valorEstres = 10
-        )
-        juego.agregarElemento(escoba)
-
-        juego.cenicienta().position(game.at(1, 1))
-    }
-
-   override method pantallaVictoria() {
-        return new PantallaResultado(
-            imagenPrincipal = "imagenVictoria.png",
-            posicionPrincipal = game.at(78, 86),
-            imagenSecundaria = "nivelCocinaHermanasCumplido.png",
-            posicionSecundaria = game.at(0, 0),
-            mensaje = "¡Lograste vencer a las hermanastras!"
-        )
-    }
-    
-    override method pantallaDerrota() {
-        return new PantallaResultado(
-            imagenPrincipal = "derrota.png",
-            posicionPrincipal = game.at(50, 90),
-            imagenSecundaria = "hermanas.png",
-            posicionSecundaria = game.at(0, 0),
-            mensaje = "¡El estrés te venció! No pudiste completar la misión a tiempo..."
-        )
-    }
-}
-
-class NivelDormitorio inherits NivelConMision {
-   
-    override method fondoNivel() = "nivelDormitorioFondo.jpeg"
-    override method imagenListaMision() = "misionDormitorio.png" 
-    override method cantidadObjetosMision() = 2
-
-    override method configurarObjetos(juego) {
-        
-        const cama = new MuebleConObjetosMision(
-            position = game.at(76, 81), 
-            image = "nivelDormitorioMuebleCerrado_Cama.png",
-            muebleCerrada = "nivelDormitorioMuebleCerrado_Cama.png",
-            muebleAbierta = "nivelDormitorioMuebleAbierto_Cama.png",
-            nombreObjeto = "frazada",
-            imagenObjetoRecolectable = "nivelDormitorioObjetoDesestresante_frazada.png",
-            posicionObjeto = game.at(76, 60),
-            mensajeDescubrimiento = "¡Encontraste la frazada!"
-        )
-        juego.agregarElemento(cama)
-
-        const placard = new MuebleConObjetosMision(
-            position = game.at(161, 56), 
-            image = "nivelDormitorioMuebleCerrado_Placard.png",
-            muebleCerrada = "nivelDormitorioMuebleCerrado_Placard.png",
-            muebleAbierta = "nivelDormitorioMuebleAbierto_Placard.png",
-            nombreObjeto = "costurero",
-            imagenObjetoRecolectable = "nivelDormitorioObjetoDesestresante_costurero.png",
-            posicionObjeto = game.at(136, 41),
-            mensajeDescubrimiento = "¡Encontraste el Costurero!"
-        )
-        juego.agregarElemento(placard)
-
-        game.say(juego.cenicienta(), "¡Es hora de encontrar tus objetos!")
-
-        const ropa = new ObjetoEstresante(
-            position = game.at(111, 21),
-            image = "nivelDormitorioObjetoEstresante_Ropa.png",
-            nombre = "Ropa sucia",
-            valorEstres = 10
-        )
-        juego.agregarElemento(ropa)
-
-        const collares = new ObjetoEstresante(
-            position = game.at(66, 51),
-            image = "nivelDormitorioObjetoEstresante_Collar.png",
-            nombre = "Collares desordenados",
-            valorEstres = 10
-        )
-        juego.agregarElemento(collares)
-
-       const espejo = new MuebleEnganioso (
-            position = game.at(126, 71), 
-            image = "nivelDormitorioMuebleXDdd.png",
-            muebleEnganio = "nivelDormitorioMuebleXDdd.png", 
-            mensajeEnganio = "Aca no hay nada..."
-       )
-       juego.agregarElemento(espejo)
-       
-       
-        const sillonAcostado = new MuebleEnganioso (
-            position = game.at(36, 26), 
-            image = "nivelDormitorioMuebleXD.png",
-            muebleEnganio = "nivelDormitorioMuebleXD.png", 
-            mensajeEnganio = "Aca no hay nada..."
-       )
-              juego.agregarElemento(sillonAcostado)
-
-       
-       
-
-        juego.cenicienta().position(game.at(1, 1))
-    }
     override method pantallaVictoria() {
         return new PantallaResultado(
-            imagenPrincipal = "imagenVictoria.png",
-            posicionPrincipal = game.at(78, 86),
-            imagenSecundaria = "nivelDormitorioHermanasCompletado.png",
-            posicionSecundaria = game.at(0, 0),
-            mensaje = "¡Lograste vencer a las hermanastras!"
+            imagenPrincipal = pantallaVictoriaData.imagenPrincipal(),
+            posicionPrincipal = pantallaVictoriaData.posicionPrincipal(),
+            imagenSecundaria = pantallaVictoriaData.imagenSecundaria(),
+            posicionSecundaria = pantallaVictoriaData.posicionSecundaria(),
+            mensaje = pantallaVictoriaData.mensaje()
         )
     }
     
     override method pantallaDerrota() {
         return new PantallaResultado(
-            imagenPrincipal = "derrota.png",
-            posicionPrincipal = game.at(50, 90),
-            imagenSecundaria = "hermanas.png",
-            posicionSecundaria = game.at(0, 0),
-            mensaje = "¡El estrés te venció! No pudiste completar la misión a tiempo..."
+            imagenPrincipal = pantallaDerrotaData.imagenPrincipal(),
+            posicionPrincipal = pantallaDerrotaData.posicionPrincipal(),
+            imagenSecundaria = pantallaDerrotaData.imagenSecundaria(),
+            posicionSecundaria = pantallaDerrotaData.posicionSecundaria(),
+            mensaje = pantallaDerrotaData.mensaje()
         )
     }
+    
+    
+    //esqueleto de la configuracion
+ override method configurar(juego) {
+ misionFallida = false
+  misionCompletada = false
+ juego.cenicienta().resetearEstres()
+  
+         // Usa la property a través del método de la superclase
+ juego.cambiarFondo(self.fondoNivel()) 
+  
+  game.schedule(100, { barraEstres.iniciar() })
+  if (!game.hasVisual(barraEstres)) {
+   game.addVisual(barraEstres)
+  }
+  
+  juego.iniciarEstresPorTiempo({
+  if (!misionFallida && !misionCompletada) {
+   misionFallida = true
+          // Usa la property
+  juego.mostrarPantallaResultado(self.pantallaDerrota()) 
 
+   game.schedule(3500, {
+   juego.irANivel(juego.nivelActual())
+   })//reinicie el nivel
+  }
+  })
+  
+  const listaMision = new ListaMision (
+  position = game.at(161,141),
+      // Usa la property
+   image = self.imagenListaMision() 
+  )
+  juego.agregarElemento(listaMision)
+  
+  // Llama al "factory" interno
+  self.configurarObjetos(juego) 
+  
+  game.say(juego.cenicienta(), "¡Es hora de encontrar tus objetos!")
+  juego.cenicienta().position(game.at(1, 1))
+ }
+ 
+ override method avanzarNivel(juego) {
+const personaje = juego.cenicienta()
+const cantidadObjetos = personaje.objetosRecolectados().size()
+// Usa la property
+if (cantidadObjetos == self.cantidadObjetosMision() && !misionCompletada) {
+misionCompletada = true
+juego.detenerEstresPorTiempo()
+
+//llamo al nuevo metodo del juego
+game.schedule(500, {
+    // Usa la property
+juego.mostrarPantallaResultado(self.pantallaVictoria())
+})
+
+//espera y avanza
+game.schedule(3500, {
+ juego.irANivel(juego.nivelActual() + 1)
+})
+}
+ }
 }
 
-
-class NivelBanio inherits NivelConMision {
-    override method fondoNivel() = "nivelBanioFondo.jpeg"
-    override method imagenListaMision() = "misionBanio.png" 
-    override method cantidadObjetosMision() = 2
-
-    override method configurarObjetos(juego) {
-        
-        const ducha = new MuebleConObjetosMision(
-            position = game.at(66, 71), 
-            image = "nivelBanioMuebleCerrado_Ducha.png",
-            muebleCerrada = "nivelBanioMuebleCerrado_Ducha.png",
-            muebleAbierta = "nivelBanioMuebleCerrado_Abierto.png",
-            nombreObjeto = "ducha",
-            imagenObjetoRecolectable = "nivelBanioJabon.png",
-            posicionObjeto = game.at(76, 60),
-            mensajeDescubrimiento = "¡Encontraste el jabon!"
-        )
-        juego.agregarElemento(ducha)
-
-        const espejoBanio = new MuebleConObjetosMision(
-            position = game.at(153, 56), 
-            image = "nivelBanioMuebleCerrado.png",
-            muebleCerrada = "nivelBanioMuebleCerrado.png",
-            muebleAbierta = "nivelBanioMuebleAbierto.png",
-            nombreObjeto = "espejoBanio",
-            imagenObjetoRecolectable = "nivelBanioPerfume.png",
-            posicionObjeto = game.at(136, 41),
-            mensajeDescubrimiento = "¡Encontraste el perfume!"
-        )
-        juego.agregarElemento(espejoBanio)
-
-        game.say(juego.cenicienta(), "¡Es hora de encontrar tus objetos!")
-
-        const bacha = new MuebleEnganioso (
-            position = game.at(120, 71), 
-            image = "nivelBanioEnganio1.png",
-            muebleEnganio = "nivelBanioEnganio1.png", 
-            mensajeEnganio = "Aca no hay nada..."
-       )
-       juego.agregarElemento(bacha)
-
-       const futon = new MuebleEnganioso (
-            position = game.at(36, 26), 
-            image = "nivelBanioEnganio2.png",
-            muebleEnganio = "nivelBanioEnganio2.png", 
-            mensajeEnganio = "Aca no hay nada..."
-       )
-       juego.agregarElemento(futon)
-
-        const toallas = new ObjetoEstresante(
-            position = game.at(111, 21),
-            image = "nivelBanioTrampa2.png",
-            nombre = "toalla",
-            valorEstres = 40
-        )
-        juego.agregarElemento(toallas)
-
-        const charco = new ObjetoEstresante(
-            position = game.at(66, 51),
-            image = "nivelBanioTrampa.png",
-            nombre = "charco",
-            valorEstres = 60
-        )
-        juego.agregarElemento(charco)
-
-       
-       
-
+class NivelFinal inherits Nivel {
+    override method configurar(juego) {
+        juego.cambiarFondo("nivelFinalFondo.jpeg") 
+        juego.cenicienta().image("cenicientaLinda.png") 
         juego.cenicienta().position(game.at(1, 1))
-    }
-    
-   
-
-    override method pantallaVictoria() {
-        return new PantallaResultado(
-            imagenPrincipal = "imagenVictoria.png",
-            posicionPrincipal = game.at(78, 86),
-            imagenSecundaria = "nivelBanioHermanasCumplido.png", 
-            posicionSecundaria = game.at(0, 0),
-            mensaje = "¡Lograste vencer a las hermanastras!"
-        )
-    }
-    
-    override method pantallaDerrota() {
-        return new PantallaResultado(
-            imagenPrincipal = "derrota.png",
-            posicionPrincipal = game.at(50, 90),
-            imagenSecundaria = "hermanas.png",
-            posicionSecundaria = game.at(0, 0),
-            mensaje = "¡El estrés te venció! No pudiste completar la misión a tiempo..."
-        )
+        game.say(juego.cenicienta(), "¡Lograste Ganar el juego, encontraste al principe!")
     }
 
-    
-}
-
-class NivelJardin inherits NivelConMision {
-    override method fondoNivel() = "nivelJardinFondo.jpeg"
-    override method imagenListaMision() = "misionJardin.png"
-    override method cantidadObjetosMision() = 1
-
-    override method configurarObjetos(juego) {
-        
-        const carreta = new MuebleConObjetosMision(
-            position = game.at(110, 70), 
-            image = "nivelJardinMuebleCerrado.png",
-            muebleCerrada = "nivelJardinMuebleCerrado.png",
-            muebleAbierta = "nivelJardinMuebleAbierto.png",
-            nombreObjeto = "espejoJardin",
-            imagenObjetoRecolectable = "nivelJardinHojas.png",
-            posicionObjeto = game.at(120, 55),
-            mensajeDescubrimiento = "¡Encontraste las hojas!"
-        )
-        juego.agregarElemento(carreta)
-
-        game.say(juego.cenicienta(), "¡Es hora de encontrar tus objetos!")
-
-        const armarioJ = new MuebleEnganioso(
-            position = game.at(170, 60), 
-            image = "nivelJardinEnganio2.png",
-            muebleEnganio = "nivelJardinEnganio2.png", 
-            mensajeEnganio = "Aca no hay nada..."
-        )
-        juego.agregarElemento(armarioJ)
-
-        const banco = new MuebleEnganioso(
-            position = game.at(95, 80), 
-            image = "nivelJardinEnganio1.png",
-            muebleEnganio = "nivelJardinEnganio1.png", 
-            mensajeEnganio = "Aca no hay nada..."
-        )
-        juego.agregarElemento(banco)
-
-        const rastrillo = new ObjetoEstresante(
-            position = game.at(130, 90),
-            image = "nivelJardinTramapa1.png",
-            nombre = "rastrillo",
-            valorEstres = 600
-        )
-        juego.agregarElemento(rastrillo)
-
-        const tierra = new ObjetoEstresante(
-            position = game.at(70, 90),
-            image = "nivelJardinTramapa2.png",
-            nombre = "tierra",
-            valorEstres = 600
-        )
-        juego.agregarElemento(tierra)
-
-        juego.cenicienta().position(game.at(20, 100))
-    }
-    
     override method avanzarNivel(juego) {
-        const personaje = juego.cenicienta()
-        const cantidadObjetos = personaje.objetosRecolectados().size()
-
-        if (cantidadObjetos == self.cantidadObjetosMision() && !misionCompletada) {
-            misionCompletada = true
-            juego.detenerEstresPorTiempo()
-            game.schedule(500, {
-                juego.mostrarPantallaResultado(self.pantallaVictoria())
-            })
+        if (juego.cenicienta().position().x() >= 75 && 
+            juego.cenicienta().position().x() <= 85 &&
+            juego.cenicienta().position().y() >= 50 && 
+            juego.cenicienta().position().y() <= 60) {
+            juego.irANivel(0) 
         }
     }
 
-    override method pantallaVictoria() {
-        return new PantallaResultado(
-            imagenPrincipal = "imagenVictoria.png",
-            posicionPrincipal = game.at(90, 85),
-            imagenSecundaria = "nivelBanioHermanasCumplido.png", 
-            posicionSecundaria = game.at(0, 0),
-            mensaje = "¡Lograste vencer a las hermanastras!"
-        )
-    }
-    
-    override method pantallaDerrota() {
-        return new PantallaResultado(
-            imagenPrincipal = "derrota.png",
-            posicionPrincipal = game.at(50, 90),
-            imagenSecundaria = "hermanas.png",
-            posicionSecundaria = game.at(0, 0),
-            mensaje = "¡El estrés te venció! No pudiste completar la misión a tiempo..."
-        )
-    }
+    override method pantallaVictoria() = null
+    override method pantallaDerrota() = null
+    override method fondoNivel() = ""
+    override method imagenListaMision() = ""
+    override method configurarObjetos(juego) {}
+    override method cantidadObjetosMision() = 0
 }

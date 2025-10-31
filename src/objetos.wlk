@@ -164,6 +164,7 @@ class ObjetoDesestresante inherits ObjetoInteractuable {
             })
         }
     }
-}class ListaMision inherits ObjetoInteractuable {
+}
+class ListaMision inherits ObjetoInteractuable {
     var yaAbierta = true
 }
