@@ -33,7 +33,7 @@ describe "Tests de estres de cenicienta" {
         assert.equals(15, cenicienta.estres())
     }
 
-    test "Cenicienta reduce su estrés al hablar con un ratón" {
+    test "cenicienta reduce su estres al hablar con un raton" {
         cenicienta.aumentarEstres(50) // le meto estres
         const ratonAmigo = new Raton(
             reduccionEstress = 20,
@@ -43,7 +43,7 @@ describe "Tests de estres de cenicienta" {
         assert.equals(30, cenicienta.estres()) //50-20 =30
     }
     
-    test "Ratón solo reduce el estrés la primera vez" {
+    test "raton solo reduce el estres la primera vez" {
         cenicienta.aumentarEstres(50)
         const ratonAmigo = new Raton(
             reduccionEstress = 20,
