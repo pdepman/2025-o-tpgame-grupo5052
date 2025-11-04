@@ -1,5 +1,5 @@
 import juego.*
        
 program princesas {
-    juego.iniciar()
+    juego.iniciarIntro()
 }

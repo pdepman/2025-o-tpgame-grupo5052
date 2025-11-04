@@ -4,6 +4,19 @@ import personajes.*
 import objetos.*
 import niveles.*
 import nivelFactory.*
+
+object fondoIntro {
+  var nombreImagen = "intro1.png"
+  method image() = nombreImagen
+  var position = game.at(50, 55)
+  method cambiarImagen(imagenNueva) {
+    nombreImagen = imagenNueva
+  }
+  method position() = position
+  method position(nuevaPosition){
+    position = nuevaPosition
+  }
+}
 object juego {
   var property cenicienta = new Cenicienta(
     position = game.at(0, 0),
@@ -14,11 +27,43 @@ object juego {
   var property nivelActual = 0
   var fondoActual = null
   
-  method iniciar() {
+
+  
+  method iniciarIntro(){
         game.title("Wollok de Cristal")
         game.height(200)
         game.width(200)
         game.cellSize(10)
+        
+        game.addVisual(fondoIntro)
+        var pantalla = 1
+        keyboard.enter().onPressDo({
+          if (pantalla == 1){
+            pantalla = 2
+            fondoIntro.cambiarImagen("intro2.png") 
+            fondoIntro.position(game.at(0, 10))
+
+             game.schedule(5000,{
+                pantalla = 3
+                fondoIntro.cambiarImagen("reglas_intro.webp")
+
+                game.schedule(5000, {
+                  game.clear()
+                  self.iniciar()
+                })
+             })
+          }
+        })
+        
+        game.start()
+  }
+
+
+  method iniciar() {
+        //game.title("Wollok de Cristal")
+        //game.height(200)
+        //game.width(200)
+        //game.cellSize(10)
         
         // 2. Llenamos la lista de niveles usando el Factory
         nivelesDelJuego.add(new NivelEntrada())
@@ -33,7 +78,7 @@ object juego {
         self.configurarPersonaje()
         self.irANivel(0)
         
-        game.start()
+       // game.start()
     }
   
   method irANivel(numeroDeNivel) {
