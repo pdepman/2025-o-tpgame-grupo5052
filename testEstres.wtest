@@ -4,34 +4,53 @@ import src.objetos.*
 import src.barraEstres.*
 
 describe "Tests de estres de cenicienta" {
+    
     const cenicienta = new Cenicienta(position = game.at(0,0), image = "cenicientaPobre.png")
 
-    test "cenicienta se estrea al colicionar con objeto estresante en cocina"{
-        const escoba = new ObjetoEstresante(valorEstres = 15)
-        // le ppongo null como 'juego', xq ObjetoEstresante no lo usa
-        escobaSucia.interactuar(cenicienta, null)
-        assert.equals(30, cenicienta.estres()) //50-20 =30
+    beforeEach {
+        cenicienta.resetearEstres()
     }
+
+    test "cenicienta se estresa al colisionar con objeto estresante"{
+        // le tengo que pasar todos los parametros por mas q sean cualquierc osa 
+        const escoba = new ObjetoEstresante(
+            valorEstres = 15,
+            position = game.at(0,0),
+            image = "test.png"
+        )
+        escoba.interactuar(cenicienta, null)
+        assert.equals(15, cenicienta.estres())
+    }
+    
     test "objeto estresante solo aumenta el estres la UNA vez " {
-        const escobaSucia = new ObjetoEstresante(valorEstres = 15)
+        const escobaSucia = new ObjetoEstresante(
+            valorEstres = 15,
+            position = game.at(0,0),
+            image = "test.png"
+        )
         escobaSucia.interactuar(cenicienta, null) 
-        escobaSucia.interactuar(cenicienta, null) // no deberia sumar de nuevo
+        escobaSucia.interactuar(cenicienta, null) // no tiene q sumar
         assert.equals(15, cenicienta.estres())
     }
 
     test "Cenicienta reduce su estrés al hablar con un ratón" {
         cenicienta.aumentarEstres(50) // le meto estres
-        const ratonAmigo = new Raton(reduccionEstress = 20)
+        const ratonAmigo = new Raton(
+            reduccionEstress = 20,
+            position = game.at(0,0) 
+        )
         ratonAmigo.interactuar(cenicienta, null)
-        assert.equals(30, cenicienta.estres()) //50-20)=30
+        assert.equals(30, cenicienta.estres()) //50-20 =30
     }
     
     test "Ratón solo reduce el estrés la primera vez" {
         cenicienta.aumentarEstres(50)
-        const ratonAmigo = new Raton(reduccionEstress = 20)
+        const ratonAmigo = new Raton(
+            reduccionEstress = 20,
+            position = game.at(0,0) 
+        )
         ratonAmigo.interactuar(cenicienta, null) 
-        ratonAmigo.interactuar(cenicienta, null) //no tiene q reducir mas
+        ratonAmigo.interactuar(cenicienta, null) // no tiene q reducir mas
         assert.equals(30, cenicienta.estres())
     }
-
 }
