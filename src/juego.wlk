@@ -2,8 +2,8 @@ import barraEstres.*
 import wollok.game.*
 import personajes.*
 import objetos.*
-import niveles.*
-import nivelFactory.*
+import clasesNivel.*
+import creadorNiveles.*
 object juego {
   var property cenicienta = new Cenicienta(
     position = game.at(0, 0),

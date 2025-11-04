@@ -68,11 +68,13 @@ class Cenicienta inherits Personaje {
 class Raton inherits ObjetoInteractuable(image = "ratones.png") {
   var pista = ""
   var reduccionEstress = 0
-  
+  var yaDesestreso = false //unavez sola quiero q la desetresen por nivel!!
+
   override method interactuar(personaje, juego) {
 
-    if(reduccionEstress > 0) { // si el raton del nivel puede reducir el estres (a partir del nivel 2)
+    if(reduccionEstress > 0 && !yaDesestreso) { // si el raton del nivel puede reducir el estres (a partir del nivel 2)
       personaje.disminuirEstres(reduccionEstress) 
+      yaDesestreso = true
     }
 
     game.say(self, pista)

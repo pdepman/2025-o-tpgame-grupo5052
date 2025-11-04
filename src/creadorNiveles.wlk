@@ -1,5 +1,5 @@
 import wollok.game.*
-import niveles.* 
+import clasesNivel.* 
 import personajes.*
 
 object nivelFactory {
@@ -202,7 +202,7 @@ object nivelFactory {
                     var property muebleAbierta = "nivelBanioMuebleAbierto.png"
                     var property nombreObjeto = "espejoBanio"
                     var property imagenObjetoRecolectable = "nivelBanioPerfume.png"
-                    var property posicionObjeto = game.at(136, 41)
+                    var property posicionObjeto = game.at(136, 51)
                     var property mensajeDescubrimiento = "¡Encontraste el perfume!"
                 }
             ],
@@ -222,7 +222,7 @@ object nivelFactory {
             ],
             mueblesEnganiososData = [
                 object {
-                    var property position = game.at(120, 71)
+                    var property position = game.at(121, 81)
                     var property image = "nivelBanioEnganio1.png"
                     var property muebleEnganio = "nivelBanioEnganio1.png"
                     var property mensajeEnganio = "Aca no hay nada..."
@@ -247,7 +247,7 @@ object nivelFactory {
             // raton baño
             ratoncitosNivel = { juego =>
                 new Raton(
-                    position = game.at(60, 72),
+                    position = game.at(91, 91),
                     pista = "Pista!Hace burbujas y huele bien, buscalo donde el agua canta.",
                     reduccionEstress = 30
                 )
@@ -267,8 +267,8 @@ object nivelFactory {
                     var property muebleCerrada = "nivelJardinMuebleCerrado.png"
                     var property muebleAbierta = "nivelJardinMuebleAbierto.png"
                     var property nombreObjeto = "Hojas"
-                    var property imagenObjetoRecolectable = "nivelJardinHojas.jpeg"
-                    var property posicionObjeto = game.at(105, 40)
+                    var property imagenObjetoRecolectable = "nivelJardinHojas.png"
+                    var property posicionObjeto = game.at(91, 21)
                     var property mensajeDescubrimiento = "¡Encontraste las hojas!"
                 }
             ],
@@ -288,13 +288,13 @@ object nivelFactory {
             ],
             mueblesEnganiososData = [
                 object {
-                    var property position = game.at(81, 91)
+                    var property position = game.at(71, 95)
                     var property image = "nivelJardin_MuebleEngani2.png"
                     var property muebleEnganio = "nivelJardin_MuebleEngani2.png"
                     var property mensajeEnganio = "Aca no hay nada..."
                 },
                 object {
-                    var property position = game.at(131, 61)
+                    var property position = game.at(141, 71)
                     var property image = "nivelJardin_MuebleEngani1.png"
                     var property muebleEnganio = "nivelJardin_MuebleEngani1.png"
                     var property mensajeEnganio = "Aca no hay nada..."
@@ -319,7 +319,7 @@ object nivelFactory {
             // raton jardin
             ratoncitosNivel = { juego =>
                 new Raton(
-                    position = game.at(110, 35),
+                    position = game.at(61, 81),
                     pista = "Pista!Entre ruedas dormidas y barro silente,
                     reposan las hojas que buscan tu suerte.",
                     reduccionEstress = 40

@@ -182,7 +182,7 @@ class NivelConMision inherits Nivel {
   })
   
   const listaMision = new ListaMision (
-  position = game.at(161,141),
+  position = game.at(151,135),
       // Usa la property
    image = self.imagenListaMision() 
   )
