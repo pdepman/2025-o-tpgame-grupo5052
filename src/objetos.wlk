@@ -91,11 +91,8 @@ class ObjetoDeTrampa inherits ObjetoInteractuable {
     var yaRecolectado = false
 
     method aplicarEfecto(personaje) {
-        if (!yaRecolectado) {  
-            yaRecolectado = true
-            personaje.agarrar(self)
-            personaje.disminuirEstres(10)
-        }
+        personaje.agarrar(self)
+        personaje.disminuirEstres(10)
     }
 
     override method interactuar(personaje, juego) {
