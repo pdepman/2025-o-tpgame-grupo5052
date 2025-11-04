@@ -172,7 +172,7 @@ object nivelFactory {
             ratoncitosNivel = { juego =>
                 new Raton(
                     position = game.at(90, 78),  
-                    pista = "De noche me abrigo con ella; descansa doblada y suave, esperando sobre la cama.",
+                    pista = "Pista! De noche me abrigo con ella; descansa doblada y suave, protegiendo los sueños.",
                     reduccionEstress = 20
                 )
             }
