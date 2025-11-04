@@ -320,8 +320,8 @@ object nivelFactory {
             ratoncitosNivel = { juego =>
                 new Raton(
                     position = game.at(110, 35),
-                    pista = "Pista!Entre barro y ruedas viejas duermen hojas cansadas.
-                            Donde el sol no brilla tanto… ahí las hallarás.",
+                    pista = "Pista!Entre ruedas dormidas y barro silente,
+                    reposan las hojas que buscan tu suerte.",
                     reduccionEstress = 40
                 )
             }
