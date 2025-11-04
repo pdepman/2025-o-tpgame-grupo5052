@@ -3,54 +3,191 @@ import src.personajes.*
 import src.objetos.*
 import src.barraEstres.*
 
-describe "Tests de estres de cenicienta" {
+describe "Tests adicionales de Cenicienta" {
     
     const cenicienta = new Cenicienta(position = game.at(0,0), image = "cenicientaPobre.png")
 
-    beforeEach {
-        cenicienta.resetearEstres()
+    //limites estres
+    
+    test "el estres de cenicienta no puede superar 100" {
+        cenicienta.aumentarEstres(80)
+        cenicienta.aumentarEstres(50) // intenta llegar a 130
+        assert.equals(100, cenicienta.estres())
+    }
+    
+    test "el estres de cenicienta no puede ser negativo" {
+        cenicienta.disminuirEstres(30) // intenta llegar a -30
+        assert.equals(0, cenicienta.estres())
+    }
+    
+    test "cenicienta esta al maximo de estres cuando llega a 100" {
+        cenicienta.aumentarEstres(100)
+        assert.that(cenicienta.estaAlMaximoEstres())
+    }
+    
+    test "cenicienta no esta al maximo de estres cuando esta en 99" {
+        cenicienta.aumentarEstres(99)
+        assert.notThat(cenicienta.estaAlMaximoEstres())
     }
 
-    test "cenicienta se estresa al colisionar con objeto estresante"{
-        // le tengo que pasar todos los parametros por mas q sean cualquierc osa 
-        const escoba = new ObjetoEstresante(
-            valorEstres = 15,
+    //recolectar obj
+    
+    test "cenicienta puede recolectar un objeto" {
+        const huevo = new ObjetoDeTrampa(
+            nombre = "Huevo",
             position = game.at(0,0),
             image = "test.png"
+        )
+        cenicienta.agarrar(huevo)
+        assert.equals(1, cenicienta.objetosRecolectados().size())
+    }
+    
+    test "cenicienta puede recolectar multiples objetos" {
+        const huevo = new ObjetoDeTrampa(
+            nombre = "Huevo",
+            position = game.at(0,0),
+            image = "test.png"
+           
+        )
+        const aceite = new ObjetoDeTrampa(
+            nombre = "Aceite",
+            position = game.at(1,1),
+            image = "test2.png"
+            
+        )
+        cenicienta.agarrar(huevo)
+        cenicienta.agarrar(aceite)
+        assert.equals(2, cenicienta.objetosRecolectados().size())
+    }
+    
+    test "limpiar objetos vacia la lista de objetos recolectados" {
+        const huevo = new ObjetoDeTrampa(
+            nombre = "Huevo",
+            position = game.at(0,0),
+            image = "test.png"
+            
+        )
+        cenicienta.agarrar(huevo)
+        cenicienta.limpiarObjetos()
+        assert.equals(0, cenicienta.objetosRecolectados().size())
+    }
+
+    //muebles con objy
+    
+    test "mueble con objeto de mision desestresa a cenicienta al abrirse" {
+        cenicienta.aumentarEstres(50)
+        const heladera = new MuebleConObjetosMision(
+            position = game.at(0,0),
+            image = "heladera.png",
+            muebleCerrada = "heladera.png",
+            muebleAbierta = "heladeraAbierta.png",
+            nombreObjeto = "Huevo",
+            imagenObjetoRecolectable = "huevo.png",
+            posicionObjeto = game.at(0,0),
+            mensajeDescubrimiento = "¡Encontraste el huevo!"
+        )
+        heladera.interactuar(cenicienta, null)
+        assert.equals(35, cenicienta.estres()) // 50 - 15 = 35
+    }
+
+
+    //muebles enganiosos
+    
+    test "mueble enganioso no aumenta ni disminuye el estres" {
+        cenicienta.aumentarEstres(40)
+        const muebleEngañoso = new MuebleEnganioso(
+            position = game.at(0,0),
+            image = "mueble.png",
+            muebleEnganio = "mueble.png",
+            mensajeEnganio = "Aca no hay nada..."
+        )
+        muebleEngañoso.interactuar(cenicienta, null)
+        assert.equals(40, cenicienta.estres()) // no cambia
+    }
+
+ 
+
+    //objetos para las trampas
+    
+     test "objeto de trampa desestresa al recolectarse" {
+        cenicienta.aumentarEstres(30)
+        const huevo = new ObjetoDeTrampa(
+            nombre = "Huevo",
+            position = game.at(0,0),
+            image = "huevo.png"
+        )
+        // aplicarEfecto xq sino  game.say y juego.removerElemento
+        huevo.aplicarEfecto(cenicienta)
+        assert.equals(20, cenicienta.estres()) // 30 - 10 = 20
+        assert.equals(1, cenicienta.objetosRecolectados().size())
+    }
+    
+    test "objeto de trampa no se puede recolectar dos veces" {
+        const huevo = new ObjetoDeTrampa(
+            nombre = "Huevo",
+            position = game.at(0,0),
+            image = "huevo.png"
+        )
+        huevo.aplicarEfecto(cenicienta)
+        huevo.aplicarEfecto(cenicienta)
+        assert.equals(1, cenicienta.objetosRecolectados().size())
+    }
+
+    //extremos
+    
+    test "multiples objetos estresantes acumulan correctamente hasta el limite" {
+        const escoba = new ObjetoEstresante(
+            valorEstres = 40,
+            position = game.at(0,0),
+            image = "escoba.png"
+        )
+        const trapo = new ObjetoEstresante(
+            valorEstres = 40,
+            position = game.at(1,1),
+            image = "trapo.png"
+        )
+        const charco = new ObjetoEstresante(
+            valorEstres = 40,
+            position = game.at(2,2),
+            image = "charco.png"
+        )
+        
+        escoba.interactuar(cenicienta, null)
+        trapo.interactuar(cenicienta, null)
+        charco.interactuar(cenicienta, null)
+        
+        assert.equals(100, cenicienta.estres()) // 40+40+40=120, >100 :(
+    }
+    
+  test "recolectar objetos mientras se esta estresada funciona correctamente" {
+        cenicienta.aumentarEstres(90)
+        const huevo = new ObjetoDeTrampa(
+            nombre = "Huevo",
+            position = game.at(0,0),
+            image = "huevo.png"
+        )
+        huevo.aplicarEfecto(cenicienta)
+        assert.equals(1, cenicienta.objetosRecolectados().size())
+        assert.equals(80, cenicienta.estres()) // 90 - 10 = 80
+    }
+     test "desestresarse cuando ya estas en 0 de estres" {
+        // cenicienta empieza en 0
+        const raton = new Raton(
+            reduccionEstress = 20,
+            position = game.at(0,0)
+        )
+        raton.interactuar(cenicienta, null)
+        assert.equals(0, cenicienta.estres()) // sigue en 0
+    }
+    
+    test "objeto estresante cuando ya estas al maximo de estres" {
+        cenicienta.aumentarEstres(100)
+        const escoba = new ObjetoEstresante(
+            valorEstres = 20,
+            position = game.at(0,0),
+            image = "escoba.png"
         )
         escoba.interactuar(cenicienta, null)
-        assert.equals(15, cenicienta.estres())
-    }
-    
-    test "objeto estresante solo aumenta el estres la UNA vez " {
-        const escobaSucia = new ObjetoEstresante(
-            valorEstres = 15,
-            position = game.at(0,0),
-            image = "test.png"
-        )
-        escobaSucia.interactuar(cenicienta, null) 
-        escobaSucia.interactuar(cenicienta, null) // no tiene q sumar
-        assert.equals(15, cenicienta.estres())
-    }
-
-    test "cenicienta reduce su estres al hablar con un raton" {
-        cenicienta.aumentarEstres(50) // le meto estres
-        const ratonAmigo = new Raton(
-            reduccionEstress = 20,
-            position = game.at(0,0) 
-        )
-        ratonAmigo.interactuar(cenicienta, null)
-        assert.equals(30, cenicienta.estres()) //50-20 =30
-    }
-    
-    test "raton solo reduce el estres la primera vez" {
-        cenicienta.aumentarEstres(50)
-        const ratonAmigo = new Raton(
-            reduccionEstress = 20,
-            position = game.at(0,0) 
-        )
-        ratonAmigo.interactuar(cenicienta, null) 
-        ratonAmigo.interactuar(cenicienta, null) // no tiene q reducir mas
-        assert.equals(30, cenicienta.estres())
+        assert.equals(100, cenicienta.estres()) // sigue en 100
     }
 }

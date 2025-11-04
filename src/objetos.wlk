@@ -18,14 +18,6 @@ class ObjetoInteractuable inherits ElementoDeJuego {
 }
 
 
-
-
-
-class RelojDeArena inherits ObjetoInteractuable {
-    override method interactuar(personaje, juego) {
-    }
-}
-
 class Puerta inherits ObjetoInteractuable {
     var property nivelDestino
     var yaActivada = false
@@ -45,9 +37,6 @@ class Puerta inherits ObjetoInteractuable {
     }
 }
 
-class Prenda inherits ElementoDeJuego {}
-class ZapatoDeCristal inherits Prenda {}
-
 class MuebleConObjetosMision inherits ObjetoInteractuable {
     //unifico todo
     var yaAbierto= false
@@ -57,11 +46,13 @@ class MuebleConObjetosMision inherits ObjetoInteractuable {
     var property imagenObjetoRecolectable
     var property posicionObjeto
     var property mensajeDescubrimiento
-
+method aplicarEfecto(personaje) {
+      personaje.disminuirEstres(15)
+    }
    override method interactuar(personaje, juego) {
         if (!yaAbierto) {
             yaAbierto = true
-            personaje.disminuirEstres(15)
+            self.aplicarEfecto(personaje)
             game.say(self, mensajeDescubrimiento)
             
             game.schedule(1000, { 
@@ -99,13 +90,19 @@ class ObjetoDeTrampa inherits ObjetoInteractuable {
     var property nombre
     var yaRecolectado = false
 
+    method aplicarEfecto(personaje) {
+        if (!yaRecolectado) {  
+            yaRecolectado = true
+            personaje.agarrar(self)
+            personaje.disminuirEstres(10)
+        }
+    }
+
     override method interactuar(personaje, juego) {
         if (!yaRecolectado) {
             yaRecolectado = true
             
-            personaje.agarrar(self)
-            
-            personaje.disminuirEstres(10)
+            self.aplicarEfecto(personaje) 
             
             game.say(personaje, "¡Conseguiste: " + nombre + "!")
             
@@ -124,12 +121,14 @@ class ObjetoEstresante inherits ObjetoInteractuable {
     var property nombre = "objeto peligroso"
     var property valorEstres = 15
     var yaActivado = false
-    
+    method aplicarEfecto(personaje) {
+        personaje.aumentarEstres(valorEstres)
+    }
     override method interactuar(personaje, juego) {
         if (!yaActivado) {
             yaActivado = true
             
-            personaje.aumentarEstres(valorEstres)
+            self.aplicarEfecto(personaje)
             
             game.say(self, "¡Cuidado! ¡Esto te estresa!")
             
@@ -143,28 +142,7 @@ class ObjetoEstresante inherits ObjetoInteractuable {
     }
 }
 
-class ObjetoDesestresante inherits ObjetoInteractuable {
-    var property nombre = "objeto relajante"
-    var property valorDesestres = 20
-    var yaActivado = false
-    
-    override method interactuar(personaje, juego) {
-        if (!yaActivado) {
-            yaActivado = true
-            
-            personaje.disminuirEstres(valorDesestres)
-            
-            game.say(self, "¡Te relajaste un poco!")
-            
-            game.schedule(1500, {
-                if (game.hasVisual(self)) {
-                    game.removeVisual(self)
-                    juego.removerElemento(self)
-                }
-            })
-        }
-    }
-}
+
 class ListaMision inherits ObjetoInteractuable {
     var yaAbierta = true
 }

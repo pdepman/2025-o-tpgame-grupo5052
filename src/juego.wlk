@@ -13,14 +13,15 @@ object juego {
   var elementosEnEscena = new List()
   var property nivelActual = 0
   var fondoActual = null
-  
+  var introActual = null
+
   method iniciar() {
         game.title("Wollok de Cristal")
         game.height(200)
         game.width(200)
         game.cellSize(10)
         
-        // 2. Llenamos la lista de niveles usando el Factory
+        // Llenamos la lista de niveles usando el Factory
         nivelesDelJuego.add(new NivelEntrada())
         
         nivelesDelJuego.add(nivelFactory.crearNivelCocina())
@@ -31,11 +32,44 @@ object juego {
         nivelesDelJuego.add(new NivelFinal())
         
         self.configurarPersonaje()
-        self.irANivel(0)
+        self.mostrarIntro()
         
         game.start()
     }
-  
+  method mostrarIntro(){
+    introActual = object {
+      var property position =  game.at(0,0)
+      var property image = "intro1.jpeg"
+        }
+
+        game.addVisual(introActual)
+
+        keyboard.enter().onPressDo({
+          self.mostrarReglas()
+        })
+  }
+
+  method mostrarReglas(){
+    game.removeVisual(introActual)
+    introActual = object {
+      var property position =  game.at(0,0)
+      var property image = "manual.png"
+    }
+    game.addVisual(introActual)
+
+    keyboard.enter().onPressDo({
+      self.empezarJuego()
+    })
+  }
+
+  method empezarJuego() {
+    game.removeVisual(introActual)
+
+    keyboard.enter().onPressDo({}) 
+
+    self.irANivel(0) //ahi vuelve todo a la normalidad
+
+  }
   method irANivel(numeroDeNivel) {
   if (game.hasVisual(cenicienta)) {
     game.removeVisual(cenicienta)
@@ -90,7 +124,8 @@ method configurarPersonaje() {
      cenicienta.position(cenicienta.position().up(10))  // era 5
      self.verificarColisionesCercanas()
      nivelesDelJuego.get(nivelActual).avanzarNivel(self)
-           game.say(cenicienta, "Coord x:" + cenicienta.position().x() + " y:" + cenicienta.position().y())
+                game.say (cenicienta, "Posición actual: " + cenicienta.position().toString())
+
 
    })
  
@@ -98,7 +133,7 @@ method configurarPersonaje() {
      cenicienta.position(cenicienta.position().down(10))  // era 5
      self.verificarColisionesCercanas()
      nivelesDelJuego.get(nivelActual).avanzarNivel(self)
-           game.say(cenicienta, "Coord x:" + cenicienta.position().x() + " y:" + cenicienta.position().y())
+          game.say (cenicienta, "Posición actual: " + cenicienta.position().toString())
 
    })
 
@@ -106,7 +141,7 @@ method configurarPersonaje() {
      cenicienta.position(cenicienta.position().left(10))  // era 5
      self.verificarColisionesCercanas()
      nivelesDelJuego.get(nivelActual).avanzarNivel(self)
-           game.say(cenicienta, "Coord x:" + cenicienta.position().x() + " y:" + cenicienta.position().y())
+     game.say (cenicienta, "Posición actual: " + cenicienta.position().toString())
 
    })
 
@@ -114,8 +149,7 @@ method configurarPersonaje() {
      cenicienta.position(cenicienta.position().right(10))  // era 5
      self.verificarColisionesCercanas()
      nivelesDelJuego.get(nivelActual).avanzarNivel(self)
-           game.say(cenicienta, "Coord x:" + cenicienta.position().x() + " y:" + cenicienta.position().y())
-
+     game.say (cenicienta, "Posición actual: " + cenicienta.position().toString())
    })
 }
   

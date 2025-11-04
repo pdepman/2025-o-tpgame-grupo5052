@@ -1,9 +1,82 @@
-import example.pepita
+import wollok.game.*
+import src.personajes.*
+import src.objetos.*
+import src.barraEstres.*
 
-describe "group of tests for pepita" {
-
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
-  }
-
+describe "Tests de barraEstres" {
+    
+    test "barra empieza en nivel 0" {
+        barraEstres.resetear()
+        assert.equals(0, barraEstres.sufijo())
+    }
+    
+    test "establecer nivel funciona correctamente" {
+        barraEstres.establecerNivel(3)
+        assert.equals(3, barraEstres.sufijo())
+    }
+    
+    test "establecer nivel no puede superar el maximo (5)" {
+        barraEstres.establecerNivel(10)
+        assert.equals(5, barraEstres.sufijo())
+    }
+    
+    test "establecer nivel no puede ser menor al minimo (0)" {
+        barraEstres.establecerNivel(-3)
+        assert.equals(0, barraEstres.sufijo())
+    }
+    
+    test "aumentar nivel incrementa el sufijo" {
+        barraEstres.resetear()
+        barraEstres.aumentarNivel()
+        assert.equals(1, barraEstres.sufijo())
+    }
+    
+    test "aumentar nivel no supera el maximo" {
+        barraEstres.establecerNivel(5)
+        barraEstres.aumentarNivel()
+        assert.equals(5, barraEstres.sufijo())
+    }
+    
+    test "disminuir nivel decrementa el sufijo" {
+        barraEstres.establecerNivel(3)
+        barraEstres.disminuirNivel()
+        assert.equals(2, barraEstres.sufijo())
+    }
+    
+    test "disminuir nivel no baja del minimo" {
+        barraEstres.resetear()
+        barraEstres.disminuirNivel()
+        assert.equals(0, barraEstres.sufijo())
+    }
+    
+    test "barra esta al maximo cuando sufijo es 5" {
+        barraEstres.establecerNivel(5)
+        assert.that(barraEstres.estaAlMaximo())
+    }
+    
+    test "barra no esta al maximo cuando sufijo es menor a 5" {
+        barraEstres.establecerNivel(4)
+        assert.notThat(barraEstres.estaAlMaximo())
+    }
+    
+    test "resetear pone la barra en 0" {
+        barraEstres.establecerNivel(5)
+        barraEstres.resetear()
+        assert.equals(0, barraEstres.sufijo())
+    }
+    
+    test "image devuelve el nombre correcto con sufijo 0" {
+        barraEstres.resetear()
+        assert.equals("barraEstres0.png", barraEstres.image())
+    }
+    
+    test "image devuelve el nombre correcto con sufijo 3" {
+        barraEstres.establecerNivel(3)
+        assert.equals("barraEstres3.png", barraEstres.image())
+    }
+    
+    test "image devuelve el nombre correcto con sufijo maximo" {
+        barraEstres.establecerNivel(5)
+        assert.equals("barraEstres5.png", barraEstres.image())
+    }
 }

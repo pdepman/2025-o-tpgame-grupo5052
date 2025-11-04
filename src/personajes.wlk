@@ -1,35 +1,29 @@
 import wollok.game.*
-import objetos.*
-import barraEstres.*
+import objetos.* import barraEstres.*
 
-class Personaje inherits ElementoDeJuego {
-  // Sobrescribe el setter de position de la superclase
+class Personaje inherits ObjetoInteractuable {
   override method position(_nuevaPosition) {
-    // if (self.puedeMoverse(_nuevaPosition)) {
     position = _nuevaPosition
-    // }
   }
   
-  // Sobrescribe el getter de position
   override method position() = position
   
-  // IMPORTANTE: usar la propiedad 'image' (no 'img')
   override method image(_nuevaImg) {
     image = _nuevaImg
   }
   
   override method image() = image
+  
+  override method interactuar(personaje, juego) {}
 }
 
 class Cenicienta inherits Personaje {
   var property estres = 0
   var objetosRecolectados = new List()
   
-  method agarrar(objeto) {
-    objetosRecolectados.add(objeto).println(
-      "Cenicienta agarró: " + objeto.nombre()
-    )
-  }
+ method agarrar(objeto) {
+    objetosRecolectados.add(objeto)
+}
   
   method objetosRecolectados() = objetosRecolectados
   
@@ -70,31 +64,18 @@ class Raton inherits ObjetoInteractuable(image = "ratones.png") {
   var reduccionEstress = 0
   var yaDesestreso = false //unavez sola quiero q la desetresen por nivel!!
 
-  override method interactuar(personaje, juego) {
-
-    if(reduccionEstress > 0 && !yaDesestreso) { // si el raton del nivel puede reducir el estres (a partir del nivel 2)
+  method aplicarEfecto(personaje) {
+    if(reduccionEstress > 0 && !yaDesestreso) { 
       personaje.disminuirEstres(reduccionEstress) 
       yaDesestreso = true
     }
+  }
 
-    game.say(self, pista)
+  override method interactuar(personaje, juego) {
+    self.aplicarEfecto(personaje)
+    game.say(self, pista) 
   }
 }
 
-class Gato inherits Personaje {
-  override method esInteractuable() = true
-  
-  method interactuar(personaje) {
-    personaje.aumentarEstres(15)
-    game.say(self, "Miau... (te juzga)")
-  }
-}
 
-class Hermanastra inherits Personaje {
-  override method esInteractuable() = true
-  
-  method interactuar(personaje) {
-    personaje.aumentarEstres(20)
-    game.say(self, "¡Te voy a acusar!")
-  }
-}
+

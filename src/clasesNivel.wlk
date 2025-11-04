@@ -225,15 +225,31 @@ class NivelFinal inherits Nivel {
         juego.cenicienta().image("cenicientaLinda.png") 
         juego.cenicienta().position(game.at(1, 1))
         game.say(juego.cenicienta(), "¡Lograste Ganar el juego, encontraste al principe!")
+        
+        game.schedule(5000, {
+            self.mostrarPantallaFinalYReiniciar(juego)
+        })
+    }
+    
+    method mostrarPantallaFinalYReiniciar(juego) {
+        if (game.hasVisual(juego.cenicienta())) {
+            game.removeVisual(juego.cenicienta())
+        }
+        
+        const pantallaFinal = object {
+            var property position = game.at(0, 0)
+            var property image = "fin.jpeg"  
+        }
+        game.addVisual(pantallaFinal)
+        
+        
+        game.schedule(5000, {
+            game.removeVisual(pantallaFinal)
+            juego.irANivel(0)  
+        })
     }
 
     override method avanzarNivel(juego) {
-        if (juego.cenicienta().position().x() >= 75 && 
-            juego.cenicienta().position().x() <= 85 &&
-            juego.cenicienta().position().y() >= 50 && 
-            juego.cenicienta().position().y() <= 60) {
-            juego.irANivel(0) 
-        }
     }
 
     override method pantallaVictoria() = null
