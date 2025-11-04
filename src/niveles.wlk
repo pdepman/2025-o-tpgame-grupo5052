@@ -2,6 +2,7 @@ import wollok.game.*
 import objetos.*
 import barraEstres.*
 import pantallas.*
+import personajes.*
 //clase abstact
 class Nivel {
     var misionFallida = false    //sacar
@@ -18,7 +19,23 @@ class Nivel {
     method cantidadObjetosMision()
 
     method necesitaBarraEstres() = false
+
+    method ratonDeNivel(juego) = null // por defecto no va a haber ningun raton
+
+    method registrarRatones(juego) {
+        const raton = self.ratonDeNivel(juego)
+        if(raton != null) {
+            juego.agregarElemento(raton)
+            game.addVisual(raton)
+            game.onCollideDo(juego.cenicienta(), {
+                otro => if(otro == raton) {
+                    raton.interactuar(juego.cenicienta(), juego)
+                }
+             })
+         }
+    }
 }
+
 
 class NivelEntrada inherits Nivel {
     override method configurar(juego) {
@@ -60,7 +77,17 @@ class NivelConMision inherits Nivel {
     //data pantallas
     var property pantallaVictoriaData
     var property pantallaDerrotaData
-    
+
+    //data ratones
+    var property ratoncitosNivel = null
+    override method ratonDeNivel(juego) {
+        if (ratoncitosNivel == null) {
+            return null
+        } else {
+            return ratoncitosNivel.apply(juego)
+        }
+          
+    }
 
     override method necesitaBarraEstres() = true
     
@@ -166,6 +193,8 @@ class NivelConMision inherits Nivel {
   
   game.say(juego.cenicienta(), "¡Es hora de encontrar tus objetos!")
   juego.cenicienta().position(game.at(1, 1))
+
+  self.registrarRatones(juego)
  }
  
  override method avanzarNivel(juego) {

@@ -1,5 +1,6 @@
 import wollok.game.*
 import niveles.* 
+import personajes.*
 
 object nivelFactory {
     
@@ -83,7 +84,16 @@ object nivelFactory {
                 var property posicionSecundaria = game.at(0, 0)
                 var property mensaje = datosVictoria.mensaje()
             },
-            pantallaDerrotaData = datosDerrota
+            pantallaDerrotaData = datosDerrota,
+
+            // ratones
+            ratoncitosNivel = { juego => 
+                new Raton(
+                    position = game.at(120, 75),
+                    pista = "Pista! Blancos y frágiles como la luna, se esconden donde siempre hace frío.",
+                    reduccionEstress = 0
+                    )
+                }
         )
     }
 
@@ -156,6 +166,16 @@ object nivelFactory {
                 var property mensaje = datosVictoria.mensaje()
             },
             pantallaDerrotaData = datosDerrota
+            ,
+
+            // raton habitacion 
+            ratoncitosNivel = { juego =>
+                new Raton(
+                    position = game.at(90, 78),  
+                    pista = "De noche me abrigo con ella; descansa doblada y suave, esperando sobre la cama.",
+                    reduccionEstress = 20
+                )
+            }
         )
     }
 
@@ -222,6 +242,16 @@ object nivelFactory {
                 var property mensaje = datosVictoria.mensaje()
             },
             pantallaDerrotaData = datosDerrota
+            ,
+
+            // raton baño
+            ratoncitosNivel = { juego =>
+                new Raton(
+                    position = game.at(60, 72),
+                    pista = "Pista!Hace burbujas y huele bien, buscalo donde el agua canta.",
+                    reduccionEstress = 30
+                )
+            }
         )
     }
 
@@ -284,6 +314,17 @@ object nivelFactory {
                 var property mensaje = datosVictoria.mensaje()
             },
             pantallaDerrotaData = datosDerrota
+            ,
+
+            // raton jardin
+            ratoncitosNivel = { juego =>
+                new Raton(
+                    position = game.at(110, 35),
+                    pista = "Pista!Entre barro y ruedas viejas duermen hojas cansadas.
+                            Donde el sol no brilla tanto… ahí las hallarás.",
+                    reduccionEstress = 40
+                )
+            }
         )
     }
 }

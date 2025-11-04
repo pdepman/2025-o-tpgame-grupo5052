@@ -65,13 +65,16 @@ class Cenicienta inherits Personaje {
   method estaAlMaximoEstres() = estres >= 100
 }
 
-class Raton inherits Personaje {
-  var property pista
+class Raton inherits ObjetoInteractuable(image = "ratones.png") {
+  var pista = ""
+  var reduccionEstress = 0
   
-  override method esInteractuable() = true
-  
-  method interactuar(personaje) {
-    personaje.disminuirEstres(10)
+  override method interactuar(personaje, juego) {
+
+    if(reduccionEstress > 0) { // si el raton del nivel puede reducir el estres (a partir del nivel 2)
+      personaje.disminuirEstres(reduccionEstress) 
+    }
+
     game.say(self, pista)
   }
 }
