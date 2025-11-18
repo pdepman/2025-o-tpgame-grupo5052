@@ -76,6 +76,3 @@ class Raton inherits ObjetoInteractuable(image = "ratones.png") {
     game.say(self, pista) 
   }
 }
-
-
-
