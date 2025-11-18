@@ -6,18 +6,19 @@ class ElementoDeJuego {
     var property image
 
     method esPuerta() = false
-    method esInteractuable() = false
 
     method interactuar(personaje, juego) {
     }
 }
 
-class ObjetoInteractuable inherits ElementoDeJuego {
-    override method esInteractuable() = true
+
+
+class RelojDeArena inherits ElementoDeJuego {
+    override method interactuar(personaje, juego) {
+    }
 }
 
-
-class Puerta inherits ObjetoInteractuable {
+class Puerta inherits ElementoDeJuego {
     var property nivelDestino
     var yaActivada = false
     
@@ -36,7 +37,10 @@ class Puerta inherits ObjetoInteractuable {
     }
 }
 
-class MuebleConObjetosMision inherits ObjetoInteractuable {
+class Prenda inherits ElementoDeJuego {}
+class ZapatoDeCristal inherits Prenda {}
+
+class MuebleConObjetosMision inherits ElementoDeJuego {
     //unifico todo
     var yaAbierto= false
     var property muebleCerrada 
@@ -74,7 +78,7 @@ method aplicarEfecto(personaje) {
 
 }
 
-class MuebleEnganioso inherits ObjetoInteractuable {
+class MuebleEnganioso inherits ElementoDeJuego {
     var property muebleEnganio
     var property mensajeEnganio
 
@@ -85,7 +89,7 @@ class MuebleEnganioso inherits ObjetoInteractuable {
     }
 
 }
-class ObjetoDeTrampa inherits ObjetoInteractuable {
+class ObjetoDeTrampa inherits ElementoDeJuego {
     var property nombre
     var yaRecolectado = false
 
@@ -113,7 +117,7 @@ class ObjetoDeTrampa inherits ObjetoInteractuable {
         }
     }
 }
-class ObjetoEstresante inherits ObjetoInteractuable {
+class ObjetoEstresante inherits ElementoDeJuego {
     var property nombre = "objeto peligroso"
     var property valorEstres = 15
     var yaActivado = false
@@ -138,6 +142,27 @@ class ObjetoEstresante inherits ObjetoInteractuable {
     }
 }
 
-
-class ListaMision inherits ObjetoInteractuable {
+class ObjetoDesestresante inherits ElementoDeJuego {
+    var property nombre = "objeto relajante"
+    var property valorDesestres = 20
+    var yaActivado = false
+    
+    override method interactuar(personaje, juego) {
+        if (!yaActivado) {
+            yaActivado = true
+            
+            personaje.disminuirEstres(valorDesestres)
+            
+            game.say(self, "¡Te relajaste un poco!")
+            
+            game.schedule(1500, {
+                if (game.hasVisual(self)) {
+                    game.removeVisual(self)
+                    juego.removerElemento(self)
+                }
+            })
+        }
+    }
+}
+class ListaMision inherits ElementoDeJuego {
 }

@@ -1,7 +1,7 @@
 import wollok.game.*
 import objetos.* import barraEstres.*
 
-class Personaje inherits ObjetoInteractuable {
+class Personaje inherits ElementoDeJuego {
   override method position(_nuevaPosition) {
     position = _nuevaPosition
   }
@@ -59,7 +59,7 @@ class Cenicienta inherits Personaje {
   method estaAlMaximoEstres() = estres >= 100
 }
 
-class Raton inherits ObjetoInteractuable(image = "ratones.png") {
+class Raton inherits ElementoDeJuego(image = "ratones.png") {
   var pista = ""
   var reduccionEstress = 0
   var yaDesestreso = false //unavez sola quiero q la desetresen por nivel!!

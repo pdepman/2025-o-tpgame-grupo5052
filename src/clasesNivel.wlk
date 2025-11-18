@@ -155,52 +155,52 @@ class NivelConMision inherits Nivel {
     
     
     //esqueleto de la configuracion
- override method configurar(juego) {
- misionFallida = false
-  misionCompletada = false
- juego.cenicienta().resetearEstres()
+    override method configurar(juego) {
+        misionFallida = false
+        misionCompletada = false
+        juego.cenicienta().resetearEstres()
   
          // Usa la property a través del método de la superclase
- juego.cambiarFondo(self.fondoNivel()) 
+        juego.cambiarFondo(self.fondoNivel()) 
   
-  game.schedule(100, { barraEstres.iniciar() })
-  if (!game.hasVisual(barraEstres)) {
-   game.addVisual(barraEstres)
-  }
+        game.schedule(100, { barraEstres.iniciar() })
+        if (!game.hasVisual(barraEstres)) {
+            game.addVisual(barraEstres)
+        }
   
-  juego.iniciarEstresPorTiempo({
-  if (!misionFallida && !misionCompletada) {
-   misionFallida = true
+        juego.iniciarEstresPorTiempo({
+            if (!misionFallida && !misionCompletada) {
+                misionFallida = true
           // Usa la property
-  juego.mostrarPantallaResultado(self.pantallaDerrota()) 
+            juego.mostrarPantallaResultado(self.pantallaDerrota()) 
 
-   game.schedule(3500, {
-   juego.irANivel(juego.nivelActual())
-   })//reinicie el nivel
-  }
-  })
+            game.schedule(3500, {
+            juego.irANivel(juego.nivelActual())
+            })//reinicie el nivel
+          }
+        })
   
-  const listaMision = new ListaMision (
-  position = game.at(151,135),
+        const listaMision = new ListaMision (
+        position = game.at(161,141),
       // Usa la property
-   image = self.imagenListaMision() 
-  )
-  juego.agregarElemento(listaMision)
+        image = self.imagenListaMision() 
+      )
+        juego.agregarElemento(listaMision)
   
   // Llama al "factory" interno
-  self.configurarObjetos(juego) 
+        self.configurarObjetos(juego) 
   
-  game.say(juego.cenicienta(), "¡Es hora de encontrar tus objetos!")
-  juego.cenicienta().position(game.at(1, 1))
+        game.say(juego.cenicienta(), "¡Es hora de encontrar tus objetos!")
+        juego.cenicienta().position(game.at(1, 1))
 
-  self.registrarRatones(juego)
- }
+        self.registrarRatones(juego)
+  }
  
- override method avanzarNivel(juego) {
-const personaje = juego.cenicienta()
-const cantidadObjetos = personaje.objetosRecolectados().size()
+    override method avanzarNivel(juego) {
+        const personaje = juego.cenicienta()
+        const cantidadObjetos = personaje.objetosRecolectados().size()
 // Usa la property
-if (cantidadObjetos == self.cantidadObjetosMision() && !misionCompletada) {
+        if (cantidadObjetos == self.cantidadObjetosMision() && !misionCompletada) {
 misionCompletada = true
 juego.detenerEstresPorTiempo()
 
