@@ -164,5 +164,3 @@ class ObjetoDesestresante inherits ElementoDeJuego {
         }
     }
 }
-class ListaMision inherits ElementoDeJuego {
-}

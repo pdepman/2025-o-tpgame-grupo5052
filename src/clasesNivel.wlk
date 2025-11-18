@@ -180,7 +180,7 @@ class NivelConMision inherits Nivel {
           }
         })
   
-        const listaMision = new ListaMision (
+        const listaMision = new ElementoDeJuego (
         position = game.at(161,141),
       // Usa la property
         image = self.imagenListaMision() 
