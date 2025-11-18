@@ -201,21 +201,21 @@ class NivelConMision inherits Nivel {
         const cantidadObjetos = personaje.objetosRecolectados().size()
 // Usa la property
         if (cantidadObjetos == self.cantidadObjetosMision() && !misionCompletada) {
-misionCompletada = true
-juego.detenerEstresPorTiempo()
+            misionCompletada = true
+            juego.detenerEstresPorTiempo()
 
 //llamo al nuevo metodo del juego
-game.schedule(500, {
+            game.schedule(500, {
     // Usa la property
-juego.mostrarPantallaResultado(self.pantallaVictoria())
-})
+            juego.mostrarPantallaResultado(self.pantallaVictoria())
+            })
 
 //espera y avanza
-game.schedule(3500, {
- juego.irANivel(juego.nivelActual() + 1)
-})
-}
- }
+            game.schedule(3500, {
+                juego.irANivel(juego.nivelActual() + 1)
+            })
+        }
+    }
 }
 
 class NivelFinal inherits Nivel {
