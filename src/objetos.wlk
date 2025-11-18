@@ -6,7 +6,6 @@ class ElementoDeJuego {
     var property image
 
     method esPuerta() = false
-    method esRelojDeArena() = false
     method esInteractuable() = false
 
     method interactuar(personaje, juego) {
@@ -141,5 +140,4 @@ class ObjetoEstresante inherits ObjetoInteractuable {
 
 
 class ListaMision inherits ObjetoInteractuable {
-    var yaAbierta = true
 }
