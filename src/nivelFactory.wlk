@@ -27,7 +27,6 @@ object nivelFactory {
         return new NivelConMision(
             fondoNivel = "nivelCocinaFondo.jpeg",
             imagenListaMision = "misionCocina.png",
-            cantidadObjetosMision = 3,
             
             objetosDeMisionData = [
                 //heladera
@@ -101,7 +100,6 @@ object nivelFactory {
         return new NivelConMision(
             fondoNivel = "nivelDormitorioFondo.jpeg",
             imagenListaMision = "misionDormitorio.png",
-            cantidadObjetosMision = 2,
             
             objetosDeMisionData = [
                 //cama
@@ -183,7 +181,6 @@ object nivelFactory {
         return new NivelConMision(
             fondoNivel = "nivelBanioFondo.jpeg",
             imagenListaMision = "misionBanio.png",
-            cantidadObjetosMision = 2,
             objetosDeMisionData = [
                 object {
                     var property position = game.at(51, 71)
@@ -259,7 +256,6 @@ object nivelFactory {
         return new NivelConMision(
             fondoNivel = "nivelJardinFondo.jpeg",
             imagenListaMision = "misionJardin.png",
-            cantidadObjetosMision = 1,
             objetosDeMisionData = [
                 object {
                     var property position = game.at(100, 30)

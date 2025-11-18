@@ -67,7 +67,6 @@ class NivelConMision inherits Nivel {
     //hago las PROPs para mis datos
     var property fondoNivel
     var property imagenListaMision
-    var property cantidadObjetosMision
     
     //listas con los DATOS para el factory
     var property objetosDeMisionData = []
@@ -94,7 +93,7 @@ class NivelConMision inherits Nivel {
     //el fondoNivel() ahora method que DEVUELVE la prop y asi resto
     override method fondoNivel() = fondoNivel 
     override method imagenListaMision() = imagenListaMision
-    override method cantidadObjetosMision() = cantidadObjetosMision
+    override method cantidadObjetosMision() = objetosDeMisionData.size()
 
     //lee las dataLists y crea objetos
     override method configurarObjetos(juego) {
